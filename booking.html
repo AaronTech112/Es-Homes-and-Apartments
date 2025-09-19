@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Stay | ES Homes & Apartments</title>
+    <meta name="description" content="Book your stay at ES Homes & Apartments. Easy booking process and secure payment options.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Using system fonts - no Google Fonts needed -->
+    <style>
+        /* Additional styles for booking page */
+        .page-banner {
+            height: 300px;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('media/IMG-20250918-WA0016.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            margin-top: 90px;
+        }
+        
+        .page-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .booking-section {
+            padding: 60px 0;
+        }
+        
+        .booking-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+        
+        .booking-form {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+        
+        .form-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: var(--border-radius);
+            border: 1px solid #ddd;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .booking-summary {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 120px;
+        }
+        
+        .summary-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+        
+        .summary-apartment {
+            display: flex;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .summary-image {
+            width: 100px;
+            height: 100px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin-right: 15px;
+        }
+        
+        .summary-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .summary-details h4 {
+            margin-bottom: 5px;
+        }
+        
+        .summary-meta {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .summary-price {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .summary-info {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .summary-label {
+            color: var(--text-light);
+        }
+        
+        .summary-value {
+            font-weight: 500;
+        }
+        
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .total-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .total-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .payment-options {
+            margin-top: 30px;
+        }
+        
+        .payment-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .payment-methods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .payment-method {
+            flex: 1;
+            min-width: 120px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .payment-method:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .payment-method.active {
+            border-color: var(--primary-color);
+            background-color: rgba(59, 89, 152, 0.05);
+        }
+        
+        .payment-method i {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+        
+        .payment-method span {
+            display: block;
+            font-weight: 500;
+        }
+        
+        .booking-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        
+        .booking-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 33.333%;
+            position: relative;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--light-color);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .booking-step.active .step-number {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+        
+        .booking-step.completed .step-number {
+            background-color: var(--accent-color);
+            color: var(--white);
+        }
+        
+        .step-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .step-description {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        .step-line {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background-color: var(--light-color);
+            z-index: 1;
+        }
+        
+        .booking-step:first-child .step-line {
+            display: none;
+        }
+        
+        .booking-step.active .step-line,
+        .booking-step.completed .step-line {
+            background-color: var(--primary-color);
+        }
+        
+        .form-section {
+            display: none;
+        }
+        
+        .form-section.active {
+            display: block;
+        }
+        
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .form-control.error {
+            border-color: #dc3545;
+        }
+        
+        .form-control.error + .error-message {
+            display: block;
+        }
+        
+        @media screen and (max-width: 992px) {
+            .booking-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .booking-summary {
+                position: static;
+                margin-top: 30px;
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .payment-methods {
+                flex-direction: column;
+            }
+            
+            .booking-steps {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .booking-step {
+                width: 100%;
+            }
+            
+            .step-line {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="media/logo.jpg" alt="ES Homes & Apartments Logo">
+                    </a>
+                </div>
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                        <li class="nav-item"><a href="apartments.html" class="nav-link">Apartments</a></li>
+                        <li class="nav-item"><a href="about.html" class="nav-link">About Us</a></li>
+                        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+                <div class="book-btn">
+                    <a href="booking.html" class="btn btn-primary active">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Banner -->
+    <section class="page-banner">
+        <div class="container">
+            <h1 class="page-title animate fadeInDown">Book Your Stay</h1>
+            <p class="page-subtitle animate fadeInUp animate--delay-1">Complete your reservation in a few simple steps</p>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section class="booking-section">
+        <div class="container">
+            <!-- Booking Steps -->
+            <div class="booking-steps">
+                <div class="booking-step active" id="step-1">
+                    <div class="step-number">1</div>
+                    <div class="step-line"></div>
+                    <h3 class="step-title">Reservation Details</h3>
+                    <p class="step-description">Select dates and guests</p>
+                </div>
+                <div class="booking-step" id="step-2">
+                    <div class="step-line"></div>
+                    <div class="step-number">2</div>
+                    <div class="step-line"></div>
+                    <h3 class="step-title">Guest Information</h3>
+                    <p class="step-description">Fill in your details</p>
+                </div>
+                <div class="booking-step" id="step-3">
+                    <div class="step-line"></div>
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Payment</h3>
+                    <p class="step-description">Secure payment process</p>
+                </div>
+            </div>
+            
+            <div class="booking-container">
+                <div class="booking-form">
+                    <h2 class="form-title">Book Your Apartment</h2>
+                    
+                    <form id="booking-form">
+                        <!-- Step 1: Reservation Details -->
+                        <div class="form-section active" id="section-1">
+                            <div class="form-group">
+                                <label for="apartment">Select Apartment</label>
+                                <select id="apartment" name="apartment" class="form-control" required>
+                                    <option value="">-- Select an Apartment --</option>
+                                    <option value="1" data-price="150000" data-image="media/IMG-20250918-WA0005.jpg" data-name="2 Bedroom Luxury Apartment">2 Bedroom Luxury Apartment - ₦150,000/day</option>
+                                    <option value="2" data-price="250000" data-image="media/IMG-20250918-WA0006.jpg" data-name="3 Bedroom Premium Apartment">3 Bedroom Premium Apartment - ₦250,000/day</option>
+                                    <option value="3" data-price="100000" data-image="media/IMG-20250918-WA0007.jpg" data-name="Deluxe Studio Apartment">Deluxe Studio Apartment - ₦100,000/day</option>
+                                    <option value="4" data-price="180000" data-image="media/IMG-20250918-WA0011.jpg" data-name="2 Bedroom Deluxe Apartment">2 Bedroom Deluxe Apartment - ₦180,000/day</option>
+                                    <option value="5" data-price="280000" data-image="media/IMG-20250918-WA0012.jpg" data-name="3 Bedroom Executive Apartment">3 Bedroom Executive Apartment - ₦280,000/day</option>
+                                    <option value="6" data-price="120000" data-image="media/IMG-20250918-WA0013.jpg" data-name="1 Bedroom Premium Apartment">1 Bedroom Premium Apartment - ₦120,000/day</option>
+                                </select>
+                                <div class="error-message">Please select an apartment</div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="check-in">Check-in Date</label>
+                                    <input type="date" id="check-in" name="check_in" class="form-control" required>
+                                    <div class="error-message">Please select a check-in date</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="check-out">Check-out Date</label>
+                                    <input type="date" id="check-out" name="check_out" class="form-control" required>
+                                    <div class="error-message">Please select a check-out date</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="guests">Number of Guests</label>
+                                    <select id="guests" name="guests" class="form-control" required>
+                                        <option value="">-- Select --</option>
+                                        <option value="1">1 Guest</option>
+                                        <option value="2">2 Guests</option>
+                                        <option value="3">3 Guests</option>
+                                        <option value="4">4 Guests</option>
+                                        <option value="5">5 Guests</option>
+                                        <option value="6">6 Guests</option>
+                                    </select>
+                                    <div class="error-message">Please select number of guests</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="special-requests">Special Requests (Optional)</label>
+                                    <select id="special-requests" name="special_requests" class="form-control">
+                                        <option value="">-- Select --</option>
+                                        <option value="early-check-in">Early Check-in</option>
+                                        <option value="late-check-out">Late Check-out</option>
+                                        <option value="airport-pickup">Airport Pickup</option>
+                                        <option value="extra-bed">Extra Bed</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-navigation">
+                                <div></div> <!-- Empty div for flex spacing -->
+                                <button type="button" class="btn btn-primary next-step" data-step="1">Continue to Guest Information</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 2: Guest Information -->
+                        <div class="form-section" id="section-2">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="first-name">First Name</label>
+                                    <input type="text" id="first-name" name="first_name" class="form-control" required>
+                                    <div class="error-message">Please enter your first name</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="last-name">Last Name</label>
+                                    <input type="text" id="last-name" name="last_name" class="form-control" required>
+                                    <div class="error-message">Please enter your last name</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" name="email" class="form-control" required>
+                                    <div class="error-message">Please enter a valid email address</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="tel" id="phone" name="phone" class="form-control" required>
+                                    <div class="error-message">Please enter your phone number</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <input type="text" id="address" name="address" class="form-control" required>
+                                <div class="error-message">Please enter your address</div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="city">City</label>
+                                    <input type="text" id="city" name="city" class="form-control" required>
+                                    <div class="error-message">Please enter your city</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="country">Country</label>
+                                    <input type="text" id="country" name="country" class="form-control" required>
+                                    <div class="error-message">Please enter your country</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="id-type">ID Type</label>
+                                <select id="id-type" name="id_type" class="form-control" required>
+                                    <option value="">-- Select --</option>
+                                    <option value="passport">Passport</option>
+                                    <option value="national-id">National ID</option>
+                                    <option value="drivers-license">Driver's License</option>
+                                </select>
+                                <div class="error-message">Please select an ID type</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="id-number">ID Number</label>
+                                <input type="text" id="id-number" name="id_number" class="form-control" required>
+                                <div class="error-message">Please enter your ID number</div>
+                            </div>
+                            
+                            <div class="form-navigation">
+                                <button type="button" class="btn btn-secondary prev-step" data-step="2">Back to Reservation Details</button>
+                                <button type="button" class="btn btn-primary next-step" data-step="2">Continue to Payment</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 3: Payment -->
+                        <div class="form-section" id="section-3">
+                            <div class="payment-options">
+                                <h3 class="payment-title">Select Payment Method</h3>
+                                <div class="payment-methods">
+                                    <div class="payment-method active" data-method="credit-card">
+                                        <i class="fas fa-credit-card"></i>
+                                        <span>Credit Card</span>
+                                    </div>
+                                    <div class="payment-method" data-method="bank-transfer">
+                                        <i class="fas fa-university"></i>
+                                        <span>Bank Transfer</span>
+                                    </div>
+                                    <div class="payment-method" data-method="paypal">
+                                        <i class="fab fa-paypal"></i>
+                                        <span>PayPal</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Credit Card Form -->
+                                <div class="payment-form" id="credit-card-form">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="card-name">Name on Card</label>
+                                            <input type="text" id="card-name" name="card_name" class="form-control" required>
+                                            <div class="error-message">Please enter the name on your card</div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="card-number">Card Number</label>
+                                            <input type="text" id="card-number" name="card_number" class="form-control" placeholder="XXXX XXXX XXXX XXXX" required>
+                                            <div class="error-message">Please enter a valid card number</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="expiry-date">Expiry Date</label>
+                                            <input type="text" id="expiry-date" name="expiry_date" class="form-control" placeholder="MM/YY" required>
+                                            <div class="error-message">Please enter a valid expiry date</div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="cvv">CVV</label>
+                                            <input type="text" id="cvv" name="cvv" class="form-control" placeholder="XXX" required>
+                                            <div class="error-message">Please enter your CVV</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Bank Transfer Form -->
+                                <div class="payment-form" id="bank-transfer-form" style="display: none;">
+                                    <div class="form-group">
+                                        <p>Please use the following bank details to make your payment:</p>
+                                        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                                            <p><strong>Bank Name:</strong> First Bank of Nigeria</p>
+                                            <p><strong>Account Name:</strong> ES Homes & Apartments Ltd</p>
+                                            <p><strong>Account Number:</strong> 1234567890</p>
+                                            <p><strong>Sort Code:</strong> 123456</p>
+                                            <p><strong>Reference:</strong> Please use your booking reference as payment reference</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="transfer-reference">Transfer Reference</label>
+                                        <input type="text" id="transfer-reference" name="transfer_reference" class="form-control" required>
+                                        <div class="error-message">Please enter your transfer reference</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- PayPal Form -->
+                                <div class="payment-form" id="paypal-form" style="display: none;">
+                                    <div class="form-group">
+                                        <p>You will be redirected to PayPal to complete your payment securely.</p>
+                                        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 10px; text-align: center;">
+                                            <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg" alt="PayPal Logo" style="max-width: 150px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="terms">
+                                    <input type="checkbox" id="terms" name="terms" required>
+                                    I agree to the <a href="#" target="_blank">Terms and Conditions</a> and <a href="#" target="_blank">Privacy Policy</a>
+                                </label>
+                                <div class="error-message">You must agree to the terms and conditions</div>
+                            </div>
+                            
+                            <div class="form-navigation">
+                                <button type="button" class="btn btn-secondary prev-step" data-step="3">Back to Guest Information</button>
+                                <button type="submit" class="btn btn-primary">Complete Booking</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="booking-summary">
+                    <h3 class="summary-title">Booking Summary</h3>
+                    
+                    <div class="summary-apartment">
+                        <div class="summary-image">
+                            <img src="media/IMG-20250918-WA0006.jpg" alt="3 Bedroom Premium Apartment" id="summary-image">
+                        </div>
+                        <div class="summary-details">
+                            <h4 id="summary-apartment-name">3 Bedroom Premium Apartment</h4>
+                            <div class="summary-meta" id="summary-meta">3 Bedrooms • 3 Bathrooms</div>
+                            <div class="summary-price" id="summary-price">₦250,000 per day</div>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-info">
+                        <div class="summary-row">
+                            <span class="summary-label">Check-in</span>
+                            <span class="summary-value" id="summary-check-in">--/--/----</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Check-out</span>
+                            <span class="summary-value" id="summary-check-out">--/--/----</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Guests</span>
+                            <span class="summary-value" id="summary-guests">--</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Duration</span>
+                            <span class="summary-value" id="summary-duration">-- nights</span>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-row">
+                        <span class="summary-label">Apartment Rate</span>
+                        <span class="summary-value" id="summary-rate">₦0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Service Fee</span>
+                        <span class="summary-value" id="summary-fee">₦0</span>
+                    </div>
+                    
+                    <div class="summary-total">
+                        <span class="total-label">Total</span>
+                        <span class="total-value" id="summary-total">₦0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="media/logo.jpg" alt="ES Homes & Apartments Logo">
+                    <p>Your life, your space, your home.</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="apartments.html">Apartments</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="booking.html">Book Now</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:E.sglobal4@gmail.com">E.sglobal4@gmail.com</a></li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+2348000000000">+234 800 000 0000</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Lagos, Nigeria</li>
+                    </ul>
+                </div>
+                <div class="footer-social">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ES Homes & Apartments. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/animations.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const apartmentId = urlParams.get('id');
+            const checkIn = urlParams.get('check_in');
+            const checkOut = urlParams.get('check_out');
+            const guests = urlParams.get('guests');
+            
+            // Set form values from URL parameters
+            if (apartmentId) {
+                document.getElementById('apartment').value = apartmentId;
+                updateApartmentSummary();
+            }
+            
+            if (checkIn) document.getElementById('check-in').value = checkIn;
+            if (checkOut) document.getElementById('check-out').value = checkOut;
+            if (guests) document.getElementById('guests').value = guests;
+            
+            // Update summary if parameters are present
+            if (checkIn && checkOut) {
+                updateDateSummary();
+            }
+            
+            // Multi-step form navigation
+            const nextButtons = document.querySelectorAll('.next-step');
+            const prevButtons = document.querySelectorAll('.prev-step');
+            const formSections = document.querySelectorAll('.form-section');
+            const steps = document.querySelectorAll('.booking-step');
+            
+            nextButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const currentStep = parseInt(this.getAttribute('data-step'));
+                    const currentSection = document.getElementById(`section-${currentStep}`);
+                    const nextSection = document.getElementById(`section-${currentStep + 1}`);
+                    
+                    // Validate current section
+                    if (validateSection(currentStep)) {
+                        // Hide current section and show next section
+                        currentSection.classList.remove('active');
+                        nextSection.classList.add('active');
+                        
+                        // Update steps
+                        steps[currentStep - 1].classList.remove('active');
+                        steps[currentStep - 1].classList.add('completed');
+                        steps[currentStep].classList.add('active');
+                        
+                        // Scroll to top of form
+                        document.querySelector('.booking-form').scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            prevButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const currentStep = parseInt(this.getAttribute('data-step'));
+                    const currentSection = document.getElementById(`section-${currentStep}`);
+                    const prevSection = document.getElementById(`section-${currentStep - 1}`);
+                    
+                    // Hide current section and show previous section
+                    currentSection.classList.remove('active');
+                    prevSection.classList.add('active');
+                    
+                    // Update steps
+                    steps[currentStep - 1].classList.remove('active');
+                    steps[currentStep - 2].classList.remove('completed');
+                    steps[currentStep - 2].classList.add('active');
+                    
+                    // Scroll to top of form
+                    document.querySelector('.booking-form').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+            
+            // Validate form section
+            function validateSection(step) {
+                const section = document.getElementById(`section-${step}`);
+                const requiredFields = section.querySelectorAll('[required]');
+                let isValid = true;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        field.classList.add('error');
+                        isValid = false;
+                    } else {
+                        field.classList.remove('error');
+                    }
+                    
+                    // Email validation
+                    if (field.type === 'email' && field.value.trim()) {
+                        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!emailPattern.test(field.value)) {
+                            field.classList.add('error');
+                            isValid = false;
+                        }
+                    }
+                    
+                    // Date validation
+                    if (field.type === 'date' && field.id === 'check-in') {
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);
+                        const checkInDate = new Date(field.value);
+                        
+                        if (checkInDate < today) {
+                            field.classList.add('error');
+                            isValid = false;
+                        }
+                    }
+                    
+                    if (field.type === 'date' && field.id === 'check-out') {
+                        const checkInDate = new Date(document.getElementById('check-in').value);
+                        const checkOutDate = new Date(field.value);
+                        
+                        if (checkOutDate <= checkInDate) {
+                            field.classList.add('error');
+                            isValid = false;
+                        }
+                    }
+                });
+                
+                return isValid;
+            }
+            
+            // Payment method selection
+            const paymentMethods = document.querySelectorAll('.payment-method');
+            const paymentForms = document.querySelectorAll('.payment-form');
+            
+            paymentMethods.forEach(method => {
+                method.addEventListener('click', function() {
+                    const selectedMethod = this.getAttribute('data-method');
+                    
+                    // Update active class
+                    paymentMethods.forEach(m => m.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show selected payment form
+                    paymentForms.forEach(form => form.style.display = 'none');
+                    document.getElementById(`${selectedMethod}-form`).style.display = 'block';
+                });
+            });
+            
+            // Form submission
+            const bookingForm = document.getElementById('booking-form');
+            
+            bookingForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validate final step
+                if (validateSection(3)) {
+                    // Show success message or redirect to confirmation page
+                    alert('Booking completed successfully! A confirmation email has been sent to your email address.');
+                    window.location.href = 'booking-confirmation.html';
+                }
+            });
+            
+            // Update booking summary
+            const apartmentSelect = document.getElementById('apartment');
+            const checkInInput = document.getElementById('check-in');
+            const checkOutInput = document.getElementById('check-out');
+            const guestsSelect = document.getElementById('guests');
+            
+            apartmentSelect.addEventListener('change', updateApartmentSummary);
+            checkInInput.addEventListener('change', updateDateSummary);
+            checkOutInput.addEventListener('change', updateDateSummary);
+            guestsSelect.addEventListener('change', updateGuestsSummary);
+            
+            function updateApartmentSummary() {
+                const selectedOption = apartmentSelect.options[apartmentSelect.selectedIndex];
+                
+                if (selectedOption.value) {
+                    const apartmentName = selectedOption.getAttribute('data-name');
+                    const apartmentPrice = parseInt(selectedOption.getAttribute('data-price'));
+                    const apartmentImage = selectedOption.getAttribute('data-image');
+                    
+                    document.getElementById('summary-apartment-name').textContent = apartmentName;
+                    document.getElementById('summary-price').textContent = `₦${apartmentPrice.toLocaleString()} per day`;
+                    document.getElementById('summary-image').src = apartmentImage;
+                    
+                    // Update meta based on apartment type
+                    let metaText = '';
+                    if (apartmentName.includes('3 Bedroom')) {
+                        metaText = '3 Bedrooms • 3 Bathrooms';
+                    } else if (apartmentName.includes('2 Bedroom')) {
+                        metaText = '2 Bedrooms • 2 Bathrooms';
+                    } else if (apartmentName.includes('1 Bedroom')) {
+                        metaText = '1 Bedroom • 1 Bathroom';
+                    } else {
+                        metaText = '1 Bedroom • 1 Bathroom';
+                    }
+                    
+                    document.getElementById('summary-meta').textContent = metaText;
+                    
+                    // Update total if dates are selected
+                    updateTotalPrice();
+                }
+            }
+            
+            function updateDateSummary() {
+                const checkInDate = new Date(checkInInput.value);
+                const checkOutDate = new Date(checkOutInput.value);
+                
+                if (checkInDate && checkOutDate && checkOutDate > checkInDate) {
+                    const nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+                    
+                    // Format dates for display
+                    const formatDate = date => {
+                        const options = { day: 'numeric', month: 'short', year: 'numeric' };
+                        return date.toLocaleDateString('en-US', options);
+                    };
+                    
+                    document.getElementById('summary-check-in').textContent = formatDate(checkInDate);
+                    document.getElementById('summary-check-out').textContent = formatDate(checkOutDate);
+                    document.getElementById('summary-duration').textContent = `${nights} night${nights > 1 ? 's' : ''}`;
+                    
+                    // Update total price
+                    updateTotalPrice();
+                }
+            }
+            
+            function updateGuestsSummary() {
+                const guestsValue = guestsSelect.value;
+                
+                if (guestsValue) {
+                    document.getElementById('summary-guests').textContent = `${guestsValue} guest${guestsValue > 1 ? 's' : ''}`;
+                }
+            }
+            
+            function updateTotalPrice() {
+                const selectedOption = apartmentSelect.options[apartmentSelect.selectedIndex];
+                const checkInDate = new Date(checkInInput.value);
+                const checkOutDate = new Date(checkOutInput.value);
+                
+                if (selectedOption.value && checkInDate && checkOutDate && checkOutDate > checkInDate) {
+                    const apartmentPrice = parseInt(selectedOption.getAttribute('data-price'));
+                    const nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+                    
+                    const subtotal = apartmentPrice * nights;
+                    const serviceFee = Math.round(subtotal * 0.05); // 5% service fee
+                    const total = subtotal + serviceFee;
+                    
+                    document.getElementById('summary-rate').textContent = `₦${subtotal.toLocaleString()}`;
+                    document.getElementById('summary-fee').textContent = `₦${serviceFee.toLocaleString()}`;
+                    document.getElementById('summary-total').textContent = `₦${total.toLocaleString()}`;
+                }
+            }
+            
+            // Set minimum dates for check-in and check-out
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            const formatDate = date => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
+            
+            checkInInput.min = formatDate(today);
+            checkOutInput.min = formatDate(tomorrow);
+            
+            // Update check-out min date when check-in changes
+            checkInInput.addEventListener('change', function() {
+                const nextDay = new Date(this.value);
+                nextDay.setDate(nextDay.getDate() + 1);
+                checkOutInput.min = formatDate(nextDay);
+                
+                if (checkOutInput.value && new Date(checkOutInput.value) <= new Date(this.value)) {
+                    checkOutInput.value = formatDate(nextDay);
+                    updateDateSummary();
+                }
+            });
+            
+            // Initialize summary if parameters are present
+            if (apartmentId && checkIn && checkOut) {
+                updateApartmentSummary();
+                updateDateSummary();
+                if (guests) updateGuestsSummary();
+            }
+        });
+    </script>
+</body>
+</html>

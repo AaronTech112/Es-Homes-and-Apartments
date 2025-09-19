@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | ES Homes & Apartments</title>
+    <meta name="description" content="Learn about ES Homes & Apartments, our mission, vision, and values. Discover the story behind our exceptional residential spaces.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Using system fonts - no Google Fonts needed -->
+    <style>
+        /* Additional styles for about page */
+        .page-banner {
+            height: 400px;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('media/IMG-20250918-WA0018.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            margin-top: 90px;
+        }
+        
+        .page-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .story-section {
+            padding: 80px 0;
+        }
+        
+        .story-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .story-image {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .story-content h2 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+        
+        .story-content p {
+            margin-bottom: 15px;
+        }
+        
+        .mission-vision-section {
+            padding: 80px 0;
+            background-color: var(--light-color);
+        }
+        
+        .mission-vision-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .mission-card,
+        .vision-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .mission-card:hover,
+        .vision-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 20px;
+        }
+        
+        .card-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .values-section {
+            padding: 80px 0;
+        }
+        
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .value-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .value-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .value-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .value-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .team-section {
+            padding: 80px 0;
+            background-color: var(--light-color);
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .team-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .team-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .team-image {
+            height: 250px;
+            overflow: hidden;
+        }
+        
+        .team-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .team-card:hover .team-image img {
+            transform: scale(1.1);
+        }
+        
+        .team-content {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .team-name {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        
+        .team-position {
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+        
+        .team-social {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .team-social a {
+            width: 35px;
+            height: 35px;
+            background-color: var(--light-color);
+            color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        
+        .team-social a:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+        
+        .stats-section {
+            padding: 80px 0;
+            background-image: linear-gradient(rgba(30, 58, 110, 0.9), rgba(30, 58, 110, 0.9)), url('media/IMG-20250918-WA0019.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--white);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .stat-text {
+            font-size: 1.1rem;
+        }
+        
+        @media screen and (max-width: 992px) {
+            .story-container,
+            .mission-vision-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .story-image {
+                margin-bottom: 30px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media screen and (max-width: 576px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="media/logo.jpg" alt="ES Homes & Apartments Logo">
+                    </a>
+                </div>
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                        <li class="nav-item"><a href="apartments.html" class="nav-link">Apartments</a></li>
+                        <li class="nav-item"><a href="about.html" class="nav-link active">About Us</a></li>
+                        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+                <div class="book-btn">
+                    <a href="booking.html" class="btn btn-primary">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Banner -->
+    <section class="page-banner">
+        <div class="container">
+            <h1 class="page-title animate fadeInDown">About ES Homes & Apartments</h1>
+            <p class="page-subtitle animate fadeInUp animate--delay-1">Discover our story, mission, vision, and the values that drive us</p>
+        </div>
+    </section>
+
+    <!-- Our Story Section -->
+    <section class="story-section">
+        <div class="container">
+            <div class="story-container">
+                <div class="story-image reveal reveal--left">
+                    <img src="media/IMG-20250918-WA0020.jpg" alt="ES Homes & Apartments Building">
+                </div>
+                <div class="story-content reveal reveal--right">
+                    <h2>Our Story</h2>
+                    <p>ES Homes & Apartments was established with a dedication to creating exceptional residential spaces that blend comfort, elegance, and community spirit. We strive to craft homes where residents feel a profound sense of belonging, surrounded by thoughtful design and serene environments.</p>
+                    <p>Our focus is on delivering quality living experiences that nurture well-being and foster warm connections among neighbors. At ES, every apartment is designed to be a haven of tranquility and joy, reflecting our commitment to excellence in urban living.</p>
+                    <p>What began as a vision to transform the concept of temporary accommodation has evolved into a thriving enterprise that sets new standards for luxury short-let apartments. Our journey has been marked by a relentless pursuit of perfection, innovative design thinking, and a deep understanding of what makes a space truly feel like home.</p>
+                    <p>Today, ES Homes & Apartments stands as a testament to our founding principles and continues to grow, guided by our passion for creating living spaces that inspire and delight.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission & Vision Section -->
+    <section class="mission-vision-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Mission & Vision</h2>
+                <p class="section-subtitle">Guided by purpose and driven by excellence</p>
+            </div>
+            
+            <div class="mission-vision-container">
+                <div class="mission-card reveal reveal--up">
+                    <div class="card-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3 class="card-title">Our Mission</h3>
+                    <p>To create vibrant, comfortable, and sustainable living environments that foster a sense of community and enhance the quality of life for our residents.</p>
+                    <p>To craft residential havens that envelop residents in comfort, nurture connections, and infuse everyday living with sweetness and purpose.</p>
+                    <p>To weave warmth into every home, nurturing spaces where love resides, memories bloom, and community thrives – crafting apartments that are sanctuaries of comfort, joy, and belonging.</p>
+                </div>
+                
+                <div class="vision-card reveal reveal--up" data-delay="200">
+                    <div class="card-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3 class="card-title">Our Vision</h3>
+                    <p>To be synonymous with warmth and excellence in urban living, where every apartment tells a story of joy, belonging, and cherished moments.</p>
+                    <p>To be a leading provider of exceptional residential spaces that blend innovation, comfort, and community spirit, setting new standards for urban living.</p>
+                    <p>To revolutionize the short-let apartment industry by creating spaces that transcend mere accommodation and become true homes, even if just for a short while.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Values Section -->
+    <section class="values-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Core Values</h2>
+                <p class="section-subtitle">The principles that guide everything we do</p>
+            </div>
+            
+            <div class="values-grid">
+                <div class="value-card reveal reveal--up">
+                    <div class="value-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3 class="value-title">Personalization</h3>
+                    <p>We believe in creating spaces that reflect your individual style and needs, ensuring that each apartment feels uniquely yours during your stay.</p>
+                </div>
+                
+                <div class="value-card reveal reveal--up" data-delay="100">
+                    <div class="value-icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h3 class="value-title">Empowerment</h3>
+                    <p>We provide a foundation for you to build the life you envision, with spaces that inspire creativity, productivity, and personal growth.</p>
+                </div>
+                
+                <div class="value-card reveal reveal--up" data-delay="200">
+                    <div class="value-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="value-title">Belonging</h3>
+                    <p>We foster a sense of community where you can feel at home, creating environments that encourage connection and shared experiences.</p>
+                </div>
+                
+                <div class="value-card reveal reveal--up" data-delay="300">
+                    <div class="value-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3 class="value-title">Quality</h3>
+                    <p>We are committed to providing well-maintained and comfortable living spaces, with attention to detail and excellence in every aspect.</p>
+                </div>
+                
+                <div class="value-card reveal reveal--up" data-delay="400">
+                    <div class="value-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h3 class="value-title">Respect</h3>
+                    <p>We value your privacy and treat every resident with respect, ensuring a dignified and considerate experience throughout your stay.</p>
+                </div>
+                
+                <div class="value-card reveal reveal--up" data-delay="500">
+                    <div class="value-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3 class="value-title">Sustainability</h3>
+                    <p>We are committed to environmentally responsible practices, creating spaces that minimize ecological impact while maximizing comfort.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Meet Our Team</h2>
+                <p class="section-subtitle">The dedicated professionals behind ES Homes & Apartments</p>
+            </div>
+            
+            <div class="team-grid">
+                <div class="team-card reveal reveal--up">
+                    <div class="team-image">
+                        <img src="media/IMG-20250918-WA0021.jpg" alt="Team Member">
+                    </div>
+                    <div class="team-content">
+                        <h3 class="team-name">Emmanuel Smith</h3>
+                        <p class="team-position">Founder & CEO</p>
+                        <div class="team-social">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-card reveal reveal--up" data-delay="100">
+                    <div class="team-image">
+                        <img src="media/IMG-20250918-WA0022.jpg" alt="Team Member">
+                    </div>
+                    <div class="team-content">
+                        <h3 class="team-name">Sarah Johnson</h3>
+                        <p class="team-position">Operations Manager</p>
+                        <div class="team-social">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-card reveal reveal--up" data-delay="200">
+                    <div class="team-image">
+                        <img src="media/IMG-20250918-WA0023.jpg" alt="Team Member">
+                    </div>
+                    <div class="team-content">
+                        <h3 class="team-name">Michael Thompson</h3>
+                        <p class="team-position">Property Manager</p>
+                        <div class="team-social">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-card reveal reveal--up" data-delay="300">
+                    <div class="team-image">
+                        <img src="media/IMG-20250918-WA0024.jpg" alt="Team Member">
+                    </div>
+                    <div class="team-content">
+                        <h3 class="team-name">Jennifer Davis</h3>
+                        <p class="team-position">Customer Relations</p>
+                        <div class="team-social">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Achievements</h2>
+                <p class="section-subtitle">Numbers that tell our story</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-item reveal reveal--up">
+                    <div class="stat-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="stat-number counter" data-target="50">0</div>
+                    <div class="stat-text">Premium Apartments</div>
+                </div>
+                
+                <div class="stat-item reveal reveal--up" data-delay="100">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number counter" data-target="1500">0</div>
+                    <div class="stat-text">Happy Guests</div>
+                </div>
+                
+                <div class="stat-item reveal reveal--up" data-delay="200">
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-number counter" data-target="15">0</div>
+                    <div class="stat-text">Awards Won</div>
+                </div>
+                
+                <div class="stat-item reveal reveal--up" data-delay="300">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-number counter" data-target="8">0</div>
+                    <div class="stat-text">Years of Experience</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta section-padding bg-primary">
+        <div class="container">
+            <div class="cta-content text-center">
+                <h2 class="cta-title">Ready to Experience Luxury Living?</h2>
+                <p class="cta-text">Book your stay at ES Homes & Apartments today and discover the perfect blend of comfort, elegance, and community.</p>
+                <div class="cta-buttons">
+                    <a href="apartments.html" class="btn btn-light">Explore Apartments</a>
+                    <a href="booking.html" class="btn btn-secondary">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="media/logo.jpg" alt="ES Homes & Apartments Logo">
+                    <p>Your life, your space, your home.</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="apartments.html">Apartments</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="booking.html">Book Now</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:E.sglobal4@gmail.com">E.sglobal4@gmail.com</a></li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+2348000000000">+234 800 000 0000</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Lagos, Nigeria</li>
+                    </ul>
+                </div>
+                <div class="footer-social">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ES Homes & Apartments. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/animations.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Counter Animation
+            const counters = document.querySelectorAll('.counter');
+            
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const duration = 2000; // 2 seconds
+                const increment = target / (duration / 16); // 60fps
+                
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            let current = 0;
+                            
+                            const updateCounter = () => {
+                                current += increment;
+                                
+                                if (current < target) {
+                                    counter.textContent = Math.ceil(current);
+                                    requestAnimationFrame(updateCounter);
+                                } else {
+                                    counter.textContent = target;
+                                }
+                            };
+                            
+                            updateCounter();
+                            observer.unobserve(counter);
+                        }
+                    });
+                }, { threshold: 0.5 });
+                
+                observer.observe(counter);
+            });
+        });
+    </script>
+</body>
+</html>

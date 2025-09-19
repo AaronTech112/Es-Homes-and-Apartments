@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3 Bedroom Premium Apartment | ES Homes & Apartments</title>
+    <meta name="description" content="Spacious 3-bedroom apartment with premium finishes and exclusive amenities. Book your luxury stay today.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Using system fonts - no Google Fonts needed -->
+    <style>
+        /* Additional styles for apartment detail page */
+        .apartment-detail {
+            padding: 60px 0;
+            margin-top: 90px;
+        }
+        
+        .apartment-detail-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+        
+        .gallery-main {
+            margin-bottom: 20px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            height: 500px;
+        }
+        
+        .gallery-main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .gallery-thumbs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        
+        .gallery-thumb {
+            height: 100px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+            opacity: 0.7;
+        }
+        
+        .gallery-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .gallery-thumb.active {
+            opacity: 1;
+            box-shadow: 0 0 0 3px var(--primary-color);
+        }
+        
+        .apartment-info {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+        
+        .apartment-title {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .apartment-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .meta-item i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-right: 10px;
+        }
+        
+        .apartment-price {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .period {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-left: 5px;
+        }
+        
+        .booking-form {
+            margin-top: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: var(--border-radius);
+            border: 1px solid #ddd;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+        
+        .booking-total {
+            background-color: var(--light-color);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .booking-total-label {
+            font-weight: 600;
+        }
+        
+        .booking-total-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .features-section {
+            padding: 60px 0;
+            background-color: var(--light-color);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .feature-item {
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .feature-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .feature-text {
+            color: var(--text-light);
+            margin-bottom: 0;
+        }
+        
+        .description-section {
+            padding: 60px 0;
+        }
+        
+        .description-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+        
+        .description-image {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .description-text h3 {
+            margin-bottom: 20px;
+        }
+        
+        .description-list {
+            margin: 20px 0;
+        }
+        
+        .description-list li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .description-list li i {
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+        
+        .map-section {
+            padding: 60px 0;
+            background-color: var(--light-color);
+        }
+        
+        .map-container {
+            height: 400px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-top: 40px;
+        }
+        
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .similar-section {
+            padding: 60px 0;
+        }
+        
+        .similar-apartments {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        @media screen and (max-width: 992px) {
+            .apartment-detail-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .description-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .description-image {
+                margin-bottom: 30px;
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .gallery-main {
+                height: 350px;
+            }
+            
+            .gallery-thumbs {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .gallery-thumb {
+                height: 80px;
+            }
+            
+            .apartment-title {
+                font-size: 1.8rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media screen and (max-width: 576px) {
+            .gallery-thumbs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="media/logo.jpg" alt="ES Homes & Apartments Logo">
+                    </a>
+                </div>
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                        <li class="nav-item"><a href="apartments.html" class="nav-link active">Apartments</a></li>
+                        <li class="nav-item"><a href="about.html" class="nav-link">About Us</a></li>
+                        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+                <div class="book-btn">
+                    <a href="booking.html" class="btn btn-primary">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Apartment Detail Section -->
+    <section class="apartment-detail">
+        <div class="container">
+            <div class="apartment-detail-grid">
+                <div class="apartment-gallery">
+                    <div class="gallery-main">
+                        <img src="media/IMG-20250918-WA0006.jpg" alt="3 Bedroom Premium Apartment" class="gallery-main-image">
+                    </div>
+                    <div class="gallery-thumbs">
+                        <div class="gallery-thumb active" data-src="media/IMG-20250918-WA0006.jpg">
+                            <img src="media/IMG-20250918-WA0006.jpg" alt="Apartment View 1">
+                        </div>
+                        <div class="gallery-thumb" data-src="media/IMG-20250918-WA0012.jpg">
+                            <img src="media/IMG-20250918-WA0012.jpg" alt="Apartment View 2">
+                        </div>
+                        <div class="gallery-thumb" data-src="media/IMG-20250918-WA0013.jpg">
+                            <img src="media/IMG-20250918-WA0013.jpg" alt="Apartment View 3">
+                        </div>
+                        <div class="gallery-thumb" data-src="media/IMG-20250918-WA0014.jpg">
+                            <img src="media/IMG-20250918-WA0014.jpg" alt="Apartment View 4">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="apartment-info">
+                    <h1 class="apartment-title">3 Bedroom Premium Apartment</h1>
+                    <div class="apartment-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-bed"></i>
+                            <span>3 Bedrooms</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-bath"></i>
+                            <span>3 Bathrooms</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-vector-square"></i>
+                            <span>1800 sq ft</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-users"></i>
+                            <span>Up to 6 Guests</span>
+                        </div>
+                    </div>
+                    
+                    <div class="apartment-price">
+                        <span class="price">₦250,000</span>
+                        <span class="period">per day</span>
+                    </div>
+                    
+                    <p>Spacious 3-bedroom apartment with premium finishes and exclusive amenities. Perfect for families or groups looking for a luxurious stay in the heart of the city.</p>
+                    
+                    <div class="booking-form">
+                        <h3>Book This Apartment</h3>
+                        <form id="booking-form" action="booking.html" method="get">
+                            <input type="hidden" name="apartment_id" value="2">
+                            
+                            <div class="form-group">
+                                <label for="check-in">Check-in Date</label>
+                                <input type="date" id="check-in" name="check_in" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="check-out">Check-out Date</label>
+                                <input type="date" id="check-out" name="check_out" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="guests">Number of Guests</label>
+                                <select id="guests" name="guests" class="form-control" required>
+                                    <option value="1">1 Guest</option>
+                                    <option value="2">2 Guests</option>
+                                    <option value="3">3 Guests</option>
+                                    <option value="4">4 Guests</option>
+                                    <option value="5">5 Guests</option>
+                                    <option value="6">6 Guests</option>
+                                </select>
+                            </div>
+                            
+                            <div class="booking-total">
+                                <span class="booking-total-label">Total:</span>
+                                <span class="booking-total-price" id="total-price">₦0</span>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Book Now</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Apartment Features</h2>
+                <p class="section-subtitle">Discover the premium amenities and features of this apartment</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-item reveal reveal--up">
+                    <div class="feature-icon">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <h3 class="feature-title">High-Speed WiFi</h3>
+                    <p class="feature-text">Stay connected with complimentary high-speed internet access throughout your stay.</p>
+                </div>
+                
+                <div class="feature-item reveal reveal--up" data-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-tv"></i>
+                    </div>
+                    <h3 class="feature-title">Smart TV</h3>
+                    <p class="feature-text">Enjoy your favorite shows and movies on our large smart TVs with streaming services.</p>
+                </div>
+                
+                <div class="feature-item reveal reveal--up" data-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-snowflake"></i>
+                    </div>
+                    <h3 class="feature-title">Air Conditioning</h3>
+                    <p class="feature-text">Stay comfortable with individually controlled air conditioning in every room.</p>
+                </div>
+                
+                <div class="feature-item reveal reveal--up" data-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3 class="feature-title">Fully Equipped Kitchen</h3>
+                    <p class="feature-text">Modern kitchen with high-end appliances and all the essentials for cooking.</p>
+                </div>
+                
+                <div class="feature-item reveal reveal--up" data-delay="400">
+                    <div class="feature-icon">
+                        <i class="fas fa-swimming-pool"></i>
+                    </div>
+                    <h3 class="feature-title">Swimming Pool</h3>
+                    <p class="feature-text">Access to our luxurious swimming pool for relaxation and recreation.</p>
+                </div>
+                
+                <div class="feature-item reveal reveal--up" data-delay="500">
+                    <div class="feature-icon">
+                        <i class="fas fa-dumbbell"></i>
+                    </div>
+                    <h3 class="feature-title">Fitness Center</h3>
+                    <p class="feature-text">Stay fit with our state-of-the-art fitness center equipped with modern equipment.</p>
+                </div>
+                
+                <div class="feature-item reveal reveal--up" data-delay="600">
+                    <div class="feature-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <h3 class="feature-title">Secure Parking</h3>
+                    <p class="feature-text">Complimentary secure parking for your vehicle during your stay.</p>
+                </div>
+                
+                <div class="feature-item reveal reveal--up" data-delay="700">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">24/7 Security</h3>
+                    <p class="feature-text">Round-the-clock security for your safety and peace of mind.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Description Section -->
+    <section class="description-section">
+        <div class="container">
+            <div class="description-content">
+                <div class="description-image reveal reveal--left">
+                    <img src="media/IMG-20250918-WA0015.jpg" alt="Apartment Interior">
+                </div>
+                <div class="description-text reveal reveal--right">
+                    <h3>Apartment Description</h3>
+                    <p>This premium 3-bedroom apartment offers the perfect blend of luxury, comfort, and convenience. Designed with meticulous attention to detail, it features spacious living areas, high-end finishes, and stunning views.</p>
+                    
+                    <ul class="description-list">
+                        <li><i class="fas fa-check"></i> Master bedroom with en-suite bathroom and walk-in closet</li>
+                        <li><i class="fas fa-check"></i> Two additional bedrooms with ample storage space</li>
+                        <li><i class="fas fa-check"></i> Spacious living room with comfortable seating and entertainment center</li>
+                        <li><i class="fas fa-check"></i> Fully equipped modern kitchen with premium appliances</li>
+                        <li><i class="fas fa-check"></i> Dining area with seating for six people</li>
+                        <li><i class="fas fa-check"></i> Private balcony with outdoor seating and city views</li>
+                        <li><i class="fas fa-check"></i> Three luxurious bathrooms with premium fixtures</li>
+                        <li><i class="fas fa-check"></i> Laundry facilities with washer and dryer</li>
+                    </ul>
+                    
+                    <p>Whether you're visiting for business or pleasure, this apartment provides all the comforts of home with the luxury of a high-end hotel. Perfect for families, groups of friends, or business travelers looking for a premium accommodation experience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="map-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Location</h2>
+                <p class="section-subtitle">Conveniently located in the heart of the city</p>
+            </div>
+            
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d253682.45932537!2d3.1191206!3d6.5483!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8b2ae68280c1%3A0xdc9e87a367c3d9cb!2sLagos%2C%20Nigeria!5e0!3m2!1sen!2sus!4v1632132015693!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Similar Apartments Section -->
+    <section class="similar-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Similar Apartments</h2>
+                <p class="section-subtitle">You might also be interested in these apartments</p>
+            </div>
+            
+            <div class="similar-apartments">
+                <div class="apartment-card reveal reveal--up">
+                    <div class="apartment-image">
+                        <img src="media/IMG-20250918-WA0012.jpg" alt="3 Bedroom Executive Apartment">
+                        <div class="apartment-tag">Executive</div>
+                    </div>
+                    <div class="apartment-content">
+                        <h3 class="apartment-title">3 Bedroom Executive Apartment</h3>
+                        <div class="apartment-meta">
+                            <span><i class="fas fa-bed"></i> 3 Bedrooms</span>
+                            <span><i class="fas fa-bath"></i> 3 Bathrooms</span>
+                            <span><i class="fas fa-vector-square"></i> 2000 sq ft</span>
+                        </div>
+                        <p class="apartment-description">Executive 3-bedroom apartment with premium amenities and private balcony.</p>
+                        <div class="apartment-price">
+                            <span class="price">₦280,000</span>
+                            <span class="period">per day</span>
+                        </div>
+                        <div class="apartment-actions">
+                            <a href="apartment-detail.html?id=5" class="btn btn-secondary">View Details</a>
+                            <a href="booking.html?id=5" class="btn btn-primary">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="apartment-card reveal reveal--up" data-delay="200">
+                    <div class="apartment-image">
+                        <img src="media/IMG-20250918-WA0005.jpg" alt="2 Bedroom Luxury Apartment">
+                        <div class="apartment-tag">Popular</div>
+                    </div>
+                    <div class="apartment-content">
+                        <h3 class="apartment-title">2 Bedroom Luxury Apartment</h3>
+                        <div class="apartment-meta">
+                            <span><i class="fas fa-bed"></i> 2 Bedrooms</span>
+                            <span><i class="fas fa-bath"></i> 2 Bathrooms</span>
+                            <span><i class="fas fa-vector-square"></i> 1200 sq ft</span>
+                        </div>
+                        <p class="apartment-description">Elegant and spacious 2-bedroom apartment with modern amenities and stunning views.</p>
+                        <div class="apartment-price">
+                            <span class="price">₦150,000</span>
+                            <span class="period">per day</span>
+                        </div>
+                        <div class="apartment-actions">
+                            <a href="apartment-detail.html?id=1" class="btn btn-secondary">View Details</a>
+                            <a href="booking.html?id=1" class="btn btn-primary">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta section-padding bg-primary">
+        <div class="container">
+            <div class="cta-content text-center">
+                <h2 class="cta-title">Ready to Book Your Stay?</h2>
+                <p class="cta-text">Secure your reservation now and experience luxury living at ES Homes & Apartments.</p>
+                <div class="cta-buttons">
+                    <a href="#booking-form" class="btn btn-light">Book Now</a>
+                    <a href="contact.html" class="btn btn-secondary">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="media/logo.jpg" alt="ES Homes & Apartments Logo">
+                    <p>Your life, your space, your home.</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="apartments.html">Apartments</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="booking.html">Book Now</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:E.sglobal4@gmail.com">E.sglobal4@gmail.com</a></li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+2348000000000">+234 800 000 0000</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Lagos, Nigeria</li>
+                    </ul>
+                </div>
+                <div class="footer-social">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ES Homes & Apartments. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/animations.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Image Gallery
+            const galleryThumbs = document.querySelectorAll('.gallery-thumb');
+            const mainImage = document.querySelector('.gallery-main-image');
+            
+            galleryThumbs.forEach(thumb => {
+                thumb.addEventListener('click', function() {
+                    // Remove active class from all thumbnails
+                    galleryThumbs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked thumbnail
+                    this.classList.add('active');
+                    
+                    // Update main image
+                    const imgSrc = this.getAttribute('data-src');
+                    mainImage.src = imgSrc;
+                    
+                    // Add fade animation
+                    mainImage.classList.remove('fadeIn');
+                    void mainImage.offsetWidth; // Trigger reflow
+                    mainImage.classList.add('fadeIn');
+                });
+            });
+            
+            // Booking Form
+            const checkInInput = document.getElementById('check-in');
+            const checkOutInput = document.getElementById('check-out');
+            const totalPriceElement = document.getElementById('total-price');
+            const pricePerNight = 250000; // ₦250,000 per night
+            
+            function calculateTotal() {
+                const checkInDate = new Date(checkInInput.value);
+                const checkOutDate = new Date(checkOutInput.value);
+                
+                if (checkInDate && checkOutDate && checkOutDate > checkInDate) {
+                    const nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+                    const totalPrice = nights * pricePerNight;
+                    totalPriceElement.textContent = `₦${totalPrice.toLocaleString()}`;
+                } else {
+                    totalPriceElement.textContent = '₦0';
+                }
+            }
+            
+            // Set minimum dates
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            const formatDate = date => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
+            
+            checkInInput.min = formatDate(today);
+            checkOutInput.min = formatDate(tomorrow);
+            
+            // Event listeners
+            checkInInput.addEventListener('change', function() {
+                const nextDay = new Date(this.value);
+                nextDay.setDate(nextDay.getDate() + 1);
+                checkOutInput.min = formatDate(nextDay);
+                
+                if (checkOutInput.value && new Date(checkOutInput.value) <= new Date(this.value)) {
+                    checkOutInput.value = formatDate(nextDay);
+                }
+                
+                calculateTotal();
+            });
+            
+            checkOutInput.addEventListener('change', calculateTotal);
+        });
+    </script>
+</body>
+</html>
