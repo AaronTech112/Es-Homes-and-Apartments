@@ -320,31 +320,38 @@ img {
   cursor: pointer;
   background: transparent;
   border: none;
-  padding: 0;
+  padding: 10px;
   z-index: 1000;
   outline: none;
+  transition: all 0.3s ease;
 }
 
 .bar {
   display: block;
   width: 25px;
-  height: 3px;
-  margin: 5px auto;
+  height: 2px;
+  margin: 4px auto;
   background-color: var(--text-color);
   transition: all 0.3s ease-in-out;
+  border-radius: 2px;
 }
 
 /* Hamburger animation */
 .nav-toggle.active .bar:nth-child(1) {
-  transform: translateY(8px) rotate(45deg);
+  transform: translateY(6px) rotate(45deg);
 }
 
 .nav-toggle.active .bar:nth-child(2) {
   opacity: 0;
+  transform: translateX(-10px);
 }
 
 .nav-toggle.active .bar:nth-child(3) {
-  transform: translateY(-8px) rotate(-45deg);
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.nav-toggle:hover .bar {
+  background-color: var(--primary-color);
 }
 
 /* ===== HERO SECTION ===== */
@@ -1016,28 +1023,60 @@ img {
   h2 {
     font-size: 2.2rem;
   }
-  
-  .nav-list {
-    display: none;
+
+  /* Show hamburger menu on mobile */
+  .nav-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
   }
   
-  .nav-list.active {
-    display: flex !important;
-    flex-direction: column;
-    position: absolute;
+  /* Mobile navigation styles */
+  .nav-list {
+    display: none;
+    position: fixed;
     top: 90px;
     left: 0;
     width: 100%;
+    height: auto;
     background-color: var(--white);
     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
     padding: 20px 0;
     z-index: 100;
-    animation: fadeIn 0.3s ease-in-out;
+    transform: translateY(-10px);
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .nav-list.active {
+    display: flex;
+    flex-direction: column;
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .nav-item {
+    margin: 10px 0;
+    text-align: center;
+    width: 100%;
+  }
+
+  .nav-link {
+    display: block;
+    padding: 10px 20px;
+    width: 100%;
   }
   
   /* Show mobile book button and hide desktop book button */
   .mobile-book-btn {
     display: block;
+    margin-top: 10px;
   }
   
   .desktop-book-btn {
