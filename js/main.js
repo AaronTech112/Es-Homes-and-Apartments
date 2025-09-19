@@ -12,9 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initTestimonialSlider();
   initScrollReveal();
   initBackToTop();
-  
-  // Initialize mobile navigation with a slight delay to ensure DOM is fully loaded
-  setTimeout(initMobileNav, 100);
+  initMobileNav();
 });
 
 /**
