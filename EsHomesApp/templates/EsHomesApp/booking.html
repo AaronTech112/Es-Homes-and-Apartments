@@ -1,19 +1,37 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Your Stay | ES Homes & Apartments</title>
-    <meta name="description" content="Book your stay at ES Homes & Apartments. Easy booking process and secure payment options.">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/animations.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Using system fonts - no Google Fonts needed -->
+    <title>Book Your Stay - ES Homes & Apartments</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animations.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .success-message {
+            color: green;
+            background-color: #e8f5e9;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .error-message {
+            color: #d32f2f;
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        #availability-message {
+            display: none;
+        }
+    </style>
     <style>
         /* Additional styles for booking page */
         .page-banner {
             height: 300px;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('media/IMG-20250918-WA0016.jpg');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{% static "media/IMG-20250918-WA0016.jpg" %}');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -369,26 +387,28 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <a href="index.html">
-                        <img src="media/logo.jpg" alt="ES Homes & Apartments Logo">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'media/logo.jpg' %}" alt="ES Homes & Apartments Logo">
                     </a>
                 </div>
                 <nav class="nav">
-                    <ul class="nav-list">
-                        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-                        <li class="nav-item"><a href="apartments.html" class="nav-link">Apartments</a></li>
-                        <li class="nav-item"><a href="about.html" class="nav-link">About Us</a></li>
-                        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+                    <ul class="nav-list" id="nav-list">
+                        <li class="nav-item"><a href="{% url 'home' %}" class="nav-link active">Home</a></li>
+                        <li class="nav-item"><a href="{% url 'apartments' %}" class="nav-link">Apartments</a></li>
+                        <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About Us</a></li>
+                        <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
+                        <li class="nav-item mobile-only"><a href="{% url 'profile' %}" class="nav-link"><i class="fas fa-user-circle fa-lg"></i> </a></li>
+                        {% if not user.is_authenticated %}
+                            <li class="nav-item mobile-only"><a href="{% url 'user_login' %}" class="btn btn-secondary mobile-btn">Login</a></li>
+                        {% endif %}
+                        <li class="nav-item mobile-only"><a href="{% url 'booking' %}" class="btn btn-primary mobile-btn">Book Now</a></li>
                     </ul>
                 </nav>
-                <div class="nav-toggle">
+                <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-list">
                     <span class="bar"></span>
                     <span class="bar"></span>
                     <span class="bar"></span>
-                </div>
-                <div class="book-btn">
-                    <a href="booking.html" class="btn btn-primary active">Book Now</a>
-                </div>
+                </button>
             </div>
         </div>
     </header>
@@ -412,55 +432,43 @@
                     <h3 class="step-title">Reservation Details</h3>
                     <p class="step-description">Select dates and guests</p>
                 </div>
-                <div class="booking-step" id="step-2">
-                    <div class="step-line"></div>
-                    <div class="step-number">2</div>
-                    <div class="step-line"></div>
-                    <h3 class="step-title">Guest Information</h3>
-                    <p class="step-description">Fill in your details</p>
-                </div>
-                <div class="booking-step" id="step-3">
-                    <div class="step-line"></div>
-                    <div class="step-number">3</div>
-                    <h3 class="step-title">Payment</h3>
-                    <p class="step-description">Secure payment process</p>
-                </div>
             </div>
             
             <div class="booking-container">
                 <div class="booking-form">
                     <h2 class="form-title">Book Your Apartment</h2>
                     
-                    <form id="booking-form">
+                    <form id="booking-form" method="post" action="{% url 'booking' %}">
+                        {% csrf_token %}
+                        <!-- Hidden field for apartment ID -->
+                        <input type="hidden" id="apartment-id" name="apartment_id">
+                        
                         <!-- Step 1: Reservation Details -->
                         <div class="form-section active" id="section-1">
                             <div class="form-group">
                                 <label for="apartment">Select Apartment</label>
                                 <select id="apartment" name="apartment" class="form-control" required>
                                     <option value="">-- Select an Apartment --</option>
-                                    <option value="1" data-price="150000" data-image="media/IMG-20250918-WA0005.jpg" data-name="2 Bedroom Luxury Apartment">2 Bedroom Luxury Apartment - ₦150,000/day</option>
-                                    <option value="2" data-price="250000" data-image="media/IMG-20250918-WA0006.jpg" data-name="3 Bedroom Premium Apartment">3 Bedroom Premium Apartment - ₦250,000/day</option>
-                                    <option value="3" data-price="100000" data-image="media/IMG-20250918-WA0007.jpg" data-name="Deluxe Studio Apartment">Deluxe Studio Apartment - ₦100,000/day</option>
-                                    <option value="4" data-price="180000" data-image="media/IMG-20250918-WA0011.jpg" data-name="2 Bedroom Deluxe Apartment">2 Bedroom Deluxe Apartment - ₦180,000/day</option>
-                                    <option value="5" data-price="280000" data-image="media/IMG-20250918-WA0012.jpg" data-name="3 Bedroom Executive Apartment">3 Bedroom Executive Apartment - ₦280,000/day</option>
-                                    <option value="6" data-price="120000" data-image="media/IMG-20250918-WA0013.jpg" data-name="1 Bedroom Premium Apartment">1 Bedroom Premium Apartment - ₦120,000/day</option>
+                                    <!-- This will be populated from the API -->
                                 </select>
                                 <div class="error-message">Please select an apartment</div>
                             </div>
                             
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="check-in">Check-in Date</label>
-                                    <input type="date" id="check-in" name="check_in" class="form-control" required>
+                                    <label for="check-in-date">Check-in Date</label>
+                                    <input type="date" id="check-in-date" name="check_in_date" class="form-control" required>
                                     <div class="error-message">Please select a check-in date</div>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="check-out">Check-out Date</label>
-                                    <input type="date" id="check-out" name="check_out" class="form-control" required>
+                                    <label for="check-out-date">Check-out Date</label>
+                                    <input type="date" id="check-out-date" name="check_out_date" class="form-control" required>
                                     <div class="error-message">Please select a check-out date</div>
                                 </div>
                             </div>
+                            
+                            <div id="availability-message" class="form-group"></div>
                             
                             <div class="form-row">
                                 <div class="form-group">
@@ -491,177 +499,11 @@
                             
                             <div class="form-navigation">
                                 <div></div> <!-- Empty div for flex spacing -->
-                                <button type="button" class="btn btn-primary next-step" data-step="1">Continue to Guest Information</button>
+                                <button type="bsubmit" class="btn btn-primary next-step" data-step="1">Continue to Guest Information</button>
                             </div>
                         </div>
                         
-                        <!-- Step 2: Guest Information -->
-                        <div class="form-section" id="section-2">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="first-name">First Name</label>
-                                    <input type="text" id="first-name" name="first_name" class="form-control" required>
-                                    <div class="error-message">Please enter your first name</div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="last-name">Last Name</label>
-                                    <input type="text" id="last-name" name="last_name" class="form-control" required>
-                                    <div class="error-message">Please enter your last name</div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="email">Email Address</label>
-                                    <input type="email" id="email" name="email" class="form-control" required>
-                                    <div class="error-message">Please enter a valid email address</div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="phone">Phone Number</label>
-                                    <input type="tel" id="phone" name="phone" class="form-control" required>
-                                    <div class="error-message">Please enter your phone number</div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="address">Address</label>
-                                <input type="text" id="address" name="address" class="form-control" required>
-                                <div class="error-message">Please enter your address</div>
-                            </div>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="city">City</label>
-                                    <input type="text" id="city" name="city" class="form-control" required>
-                                    <div class="error-message">Please enter your city</div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="country">Country</label>
-                                    <input type="text" id="country" name="country" class="form-control" required>
-                                    <div class="error-message">Please enter your country</div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="id-type">ID Type</label>
-                                <select id="id-type" name="id_type" class="form-control" required>
-                                    <option value="">-- Select --</option>
-                                    <option value="passport">Passport</option>
-                                    <option value="national-id">National ID</option>
-                                    <option value="drivers-license">Driver's License</option>
-                                </select>
-                                <div class="error-message">Please select an ID type</div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="id-number">ID Number</label>
-                                <input type="text" id="id-number" name="id_number" class="form-control" required>
-                                <div class="error-message">Please enter your ID number</div>
-                            </div>
-                            
-                            <div class="form-navigation">
-                                <button type="button" class="btn btn-secondary prev-step" data-step="2">Back to Reservation Details</button>
-                                <button type="button" class="btn btn-primary next-step" data-step="2">Continue to Payment</button>
-                            </div>
-                        </div>
-                        
-                        <!-- Step 3: Payment -->
-                        <div class="form-section" id="section-3">
-                            <div class="payment-options">
-                                <h3 class="payment-title">Select Payment Method</h3>
-                                <div class="payment-methods">
-                                    <div class="payment-method active" data-method="credit-card">
-                                        <i class="fas fa-credit-card"></i>
-                                        <span>Credit Card</span>
-                                    </div>
-                                    <div class="payment-method" data-method="bank-transfer">
-                                        <i class="fas fa-university"></i>
-                                        <span>Bank Transfer</span>
-                                    </div>
-                                    <div class="payment-method" data-method="paypal">
-                                        <i class="fab fa-paypal"></i>
-                                        <span>PayPal</span>
-                                    </div>
-                                </div>
-                                
-                                <!-- Credit Card Form -->
-                                <div class="payment-form" id="credit-card-form">
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label for="card-name">Name on Card</label>
-                                            <input type="text" id="card-name" name="card_name" class="form-control" required>
-                                            <div class="error-message">Please enter the name on your card</div>
-                                        </div>
-                                        
-                                        <div class="form-group">
-                                            <label for="card-number">Card Number</label>
-                                            <input type="text" id="card-number" name="card_number" class="form-control" placeholder="XXXX XXXX XXXX XXXX" required>
-                                            <div class="error-message">Please enter a valid card number</div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label for="expiry-date">Expiry Date</label>
-                                            <input type="text" id="expiry-date" name="expiry_date" class="form-control" placeholder="MM/YY" required>
-                                            <div class="error-message">Please enter a valid expiry date</div>
-                                        </div>
-                                        
-                                        <div class="form-group">
-                                            <label for="cvv">CVV</label>
-                                            <input type="text" id="cvv" name="cvv" class="form-control" placeholder="XXX" required>
-                                            <div class="error-message">Please enter your CVV</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Bank Transfer Form -->
-                                <div class="payment-form" id="bank-transfer-form" style="display: none;">
-                                    <div class="form-group">
-                                        <p>Please use the following bank details to make your payment:</p>
-                                        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 10px;">
-                                            <p><strong>Bank Name:</strong> First Bank of Nigeria</p>
-                                            <p><strong>Account Name:</strong> ES Homes & Apartments Ltd</p>
-                                            <p><strong>Account Number:</strong> 1234567890</p>
-                                            <p><strong>Sort Code:</strong> 123456</p>
-                                            <p><strong>Reference:</strong> Please use your booking reference as payment reference</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="transfer-reference">Transfer Reference</label>
-                                        <input type="text" id="transfer-reference" name="transfer_reference" class="form-control" required>
-                                        <div class="error-message">Please enter your transfer reference</div>
-                                    </div>
-                                </div>
-                                
-                                <!-- PayPal Form -->
-                                <div class="payment-form" id="paypal-form" style="display: none;">
-                                    <div class="form-group">
-                                        <p>You will be redirected to PayPal to complete your payment securely.</p>
-                                        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 10px; text-align: center;">
-                                            <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg" alt="PayPal Logo" style="max-width: 150px;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="terms">
-                                    <input type="checkbox" id="terms" name="terms" required>
-                                    I agree to the <a href="#" target="_blank">Terms and Conditions</a> and <a href="#" target="_blank">Privacy Policy</a>
-                                </label>
-                                <div class="error-message">You must agree to the terms and conditions</div>
-                            </div>
-                            
-                            <div class="form-navigation">
-                                <button type="button" class="btn btn-secondary prev-step" data-step="3">Back to Guest Information</button>
-                                <button type="submit" class="btn btn-primary">Complete Booking</button>
-                            </div>
-                        </div>
+
                     </form>
                 </div>
                 
@@ -670,7 +512,7 @@
                     
                     <div class="summary-apartment">
                         <div class="summary-image">
-                            <img src="media/IMG-20250918-WA0006.jpg" alt="3 Bedroom Premium Apartment" id="summary-image">
+                            <img src="{% static 'media/IMG-20250918-WA0006.jpg' %}" alt="3 Bedroom Premium Apartment" id="summary-image">
                         </div>
                         <div class="summary-details">
                             <h4 id="summary-apartment-name">3 Bedroom Premium Apartment</h4>
@@ -721,17 +563,17 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <img src="media/logo.jpg" alt="ES Homes & Apartments Logo">
+                    <img src="{% static 'media/logo.jpg' %}" alt="ES Homes & Apartments Logo">
                     <p>Your life, your space, your home.</p>
                 </div>
                 <div class="footer-links">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="apartments.html">Apartments</a></li>
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                        <li><a href="booking.html">Book Now</a></li>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'apartments' %}">Apartments</a></li>
+                        <li><a href="{% url 'about' %}">About Us</a></li>
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                        <li><a href="{% url 'booking' %}">Book Now</a></li>
                     </ul>
                 </div>
                 <div class="footer-contact">
@@ -764,8 +606,10 @@
     </button>
 
     <!-- Scripts -->
-    <script src="js/main.js"></script>
-    <script src="js/animations.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/animations.js' %}"></script>
+    <script src="{% static 'js/booking-api.js' %}"></script>
+    <script src="{% static 'js/booking-integration.js' %}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Get URL parameters
@@ -913,141 +757,16 @@
             // Form submission
             const bookingForm = document.getElementById('booking-form');
             
+            // Update form submission to use Django URL
             bookingForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
                 // Validate final step
                 if (validateSection(3)) {
-                    // Show success message or redirect to confirmation page
-                    alert('Booking completed successfully! A confirmation email has been sent to your email address.');
-                    window.location.href = 'booking-confirmation.html';
+                    // Submit form to Django view
+                    this.submit();
                 }
             });
-            
-            // Update booking summary
-            const apartmentSelect = document.getElementById('apartment');
-            const checkInInput = document.getElementById('check-in');
-            const checkOutInput = document.getElementById('check-out');
-            const guestsSelect = document.getElementById('guests');
-            
-            apartmentSelect.addEventListener('change', updateApartmentSummary);
-            checkInInput.addEventListener('change', updateDateSummary);
-            checkOutInput.addEventListener('change', updateDateSummary);
-            guestsSelect.addEventListener('change', updateGuestsSummary);
-            
-            function updateApartmentSummary() {
-                const selectedOption = apartmentSelect.options[apartmentSelect.selectedIndex];
-                
-                if (selectedOption.value) {
-                    const apartmentName = selectedOption.getAttribute('data-name');
-                    const apartmentPrice = parseInt(selectedOption.getAttribute('data-price'));
-                    const apartmentImage = selectedOption.getAttribute('data-image');
-                    
-                    document.getElementById('summary-apartment-name').textContent = apartmentName;
-                    document.getElementById('summary-price').textContent = `₦${apartmentPrice.toLocaleString()} per day`;
-                    document.getElementById('summary-image').src = apartmentImage;
-                    
-                    // Update meta based on apartment type
-                    let metaText = '';
-                    if (apartmentName.includes('3 Bedroom')) {
-                        metaText = '3 Bedrooms • 3 Bathrooms';
-                    } else if (apartmentName.includes('2 Bedroom')) {
-                        metaText = '2 Bedrooms • 2 Bathrooms';
-                    } else if (apartmentName.includes('1 Bedroom')) {
-                        metaText = '1 Bedroom • 1 Bathroom';
-                    } else {
-                        metaText = '1 Bedroom • 1 Bathroom';
-                    }
-                    
-                    document.getElementById('summary-meta').textContent = metaText;
-                    
-                    // Update total if dates are selected
-                    updateTotalPrice();
-                }
-            }
-            
-            function updateDateSummary() {
-                const checkInDate = new Date(checkInInput.value);
-                const checkOutDate = new Date(checkOutInput.value);
-                
-                if (checkInDate && checkOutDate && checkOutDate > checkInDate) {
-                    const nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
-                    
-                    // Format dates for display
-                    const formatDate = date => {
-                        const options = { day: 'numeric', month: 'short', year: 'numeric' };
-                        return date.toLocaleDateString('en-US', options);
-                    };
-                    
-                    document.getElementById('summary-check-in').textContent = formatDate(checkInDate);
-                    document.getElementById('summary-check-out').textContent = formatDate(checkOutDate);
-                    document.getElementById('summary-duration').textContent = `${nights} night${nights > 1 ? 's' : ''}`;
-                    
-                    // Update total price
-                    updateTotalPrice();
-                }
-            }
-            
-            function updateGuestsSummary() {
-                const guestsValue = guestsSelect.value;
-                
-                if (guestsValue) {
-                    document.getElementById('summary-guests').textContent = `${guestsValue} guest${guestsValue > 1 ? 's' : ''}`;
-                }
-            }
-            
-            function updateTotalPrice() {
-                const selectedOption = apartmentSelect.options[apartmentSelect.selectedIndex];
-                const checkInDate = new Date(checkInInput.value);
-                const checkOutDate = new Date(checkOutInput.value);
-                
-                if (selectedOption.value && checkInDate && checkOutDate && checkOutDate > checkInDate) {
-                    const apartmentPrice = parseInt(selectedOption.getAttribute('data-price'));
-                    const nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
-                    
-                    const subtotal = apartmentPrice * nights;
-                    const serviceFee = Math.round(subtotal * 0.05); // 5% service fee
-                    const total = subtotal + serviceFee;
-                    
-                    document.getElementById('summary-rate').textContent = `₦${subtotal.toLocaleString()}`;
-                    document.getElementById('summary-fee').textContent = `₦${serviceFee.toLocaleString()}`;
-                    document.getElementById('summary-total').textContent = `₦${total.toLocaleString()}`;
-                }
-            }
-            
-            // Set minimum dates for check-in and check-out
-            const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            
-            const formatDate = date => {
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                return `${year}-${month}-${day}`;
-            };
-            
-            checkInInput.min = formatDate(today);
-            checkOutInput.min = formatDate(tomorrow);
-            
-            // Update check-out min date when check-in changes
-            checkInInput.addEventListener('change', function() {
-                const nextDay = new Date(this.value);
-                nextDay.setDate(nextDay.getDate() + 1);
-                checkOutInput.min = formatDate(nextDay);
-                
-                if (checkOutInput.value && new Date(checkOutInput.value) <= new Date(this.value)) {
-                    checkOutInput.value = formatDate(nextDay);
-                    updateDateSummary();
-                }
-            });
-            
-            // Initialize summary if parameters are present
-            if (apartmentId && checkIn && checkOut) {
-                updateApartmentSummary();
-                updateDateSummary();
-                if (guests) updateGuestsSummary();
-            }
         });
     </script>
 </body>

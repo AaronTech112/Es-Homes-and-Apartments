@@ -15,6 +15,294 @@
   --transition: all 0.3s ease-in-out;
   --border-radius: 8px;
   --section-padding: 80px 0;
+  --error-color: #dc3545;
+  --success-color: #28a745;
+}
+
+/* ===== AUTHENTICATION PAGES STYLES ===== */
+.auth-section {
+  padding: var(--section-padding);
+  background-color: var(--light-color);
+  min-height: calc(100vh - 300px);
+  display: flex;
+  align-items: center;
+}
+
+.auth-container {
+  display: flex;
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.auth-form-wrapper {
+  flex: 1;
+  padding: 3rem;
+}
+
+.auth-image {
+  flex: 1;
+  position: relative;
+  display: none;
+}
+
+.auth-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.auth-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(30, 58, 110, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.auth-image-content {
+  color: var(--white);
+  text-align: center;
+}
+
+.auth-image-content h3 {
+  color: var(--white);
+  margin-bottom: 1rem;
+}
+
+.auth-title {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.auth-title:after {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.auth-subtitle {
+  text-align: center;
+  color: var(--text-light);
+  margin-bottom: 2rem;
+}
+
+.auth-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.auth-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-with-icon i {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light);
+}
+
+.input-with-icon input {
+  padding-left: 45px;
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"],
+.auth-form input[type="tel"] {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.auth-form input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 89, 152, 0.1);
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+}
+
+.remember-me input {
+  margin-right: 0.5rem;
+}
+
+.forgot-password {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+.btn-block {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.auth-divider {
+  text-align: center;
+  position: relative;
+  margin: 1.5rem 0;
+}
+
+.auth-divider:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #ddd;
+}
+
+.auth-divider span {
+  position: relative;
+  background-color: var(--white);
+  padding: 0 15px;
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.social-login {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn-social {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--white);
+  border: 1px solid #ddd;
+  color: var(--text-color);
+  padding: 10px;
+}
+
+.btn-google:hover {
+  background-color: #dd4b39;
+  border-color: #dd4b39;
+  color: var(--white);
+}
+
+.btn-facebook:hover {
+  background-color: #3b5998;
+  border-color: #3b5998;
+  color: var(--white);
+}
+
+.auth-footer {
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.auth-footer a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.terms-checkbox {
+  margin-bottom: 1.5rem;
+}
+
+.terms-checkbox label {
+  display: flex;
+  align-items: flex-start;
+}
+
+.terms-checkbox input {
+  margin-right: 10px;
+  margin-top: 5px;
+}
+
+.error-message {
+  color: var(--error-color);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  display: none;
+}
+
+.input-error {
+  border-color: var(--error-color) !important;
+}
+
+.input-success {
+  border-color: var(--success-color) !important;
+}
+
+/* Media Queries for Auth Pages */
+@media (min-width: 768px) {
+  .auth-image {
+    display: block;
+  }
+}
+
+@media (max-width: 767px) {
+  .auth-form-wrapper {
+    padding: 2rem;
+  }
+  
+  .auth-title {
+    font-size: 1.8rem;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .form-row .form-group {
+    margin-bottom: 1.5rem;
+  }
 }
 
 /* ===== RESET & BASE STYLES ===== */
@@ -227,6 +515,35 @@ img {
   box-shadow: var(--shadow);
   padding: 15px 0;
   transition: var(--transition);
+}
+
+/* User Navigation Styles */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 5px;
+}
+
+.profile-icon {
+  font-size: 24px;
+  color: var(--primary-color);
+  transition: color 0.3s ease;
+}
+
+.profile-icon:hover {
+  color: var(--secondary-color);
+}
+
+.login-btn {
+  padding: 8px 15px;
+  font-size: 14px;
 }
 
 /* Book Now Button */
@@ -1037,73 +1354,112 @@ img {
     z-index: 1000;
   }
   
-  /* Mobile navigation styles */
-  .nav-list {
-    display: none;
-    position: fixed;
-    top: 90px;
-    left: 0;
-    width: 100%;
-    height: auto;
-    background-color: var(--white);
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-    padding: 20px 0;
-    z-index: 100;
-    transform: translateY(-10px);
-    opacity: 0;
-    transition: all 0.3s ease-in-out;
-  }
-  
-  .nav-list.active {
+/* Default styles for the navigation list */
+.nav-list {
     display: flex;
-    flex-direction: column;
-    transform: translateY(0);
-    opacity: 1;
-  }
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
 
-  .nav-item {
-    margin: 10px 0;
-    text-align: center;
-    width: 100%;
-  }
+/* Hide the navigation list on mobile by default */
+@media (max-width: 992px) {
+    .nav-list {
+        display: none;
+        position: absolute;
+        top: 100%; /* Position below the header */
+        left: 0;
+        right: 0;
+        background: #fff; /* Adjust to match your design */
+        flex-direction: column;
+        padding: 1rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
 
-  .nav-link {
-    display: block;
-    padding: 10px 20px;
-    width: 100%;
-  }
-  
-  /* Show mobile book button and hide desktop book button */
-  .mobile-book-btn {
-    display: block;
-    margin-top: 10px;
-  }
-  
-  .desktop-book-btn {
-    display: none;
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
+    /* Show the navigation list when active */
+    .nav-list.active {
+        display: flex;
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
+
+    /* Style the hamburger menu button */
+    .nav-toggle {
+        display: block;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
     }
-  }
-  
-  .nav-item {
-    margin: 10px 0;
-    text-align: center;
-  }
-  
-  .nav-item .nav-link {
+
+    /* Hide the hamburger menu on desktop */
+    @media (min-width: 993px) {
+        .nav-toggle {
+            display: none;
+        }
+    }
+
+    /* Style navigation links for mobile */
+    .nav-list li {
+        margin: 0.5rem 0;
+    }
+
+    .nav-list .nav-link {
+        display: block;
+        padding: 0.5rem;
+        text-align: center;
+    }
+
+    /* Style the mobile book button */
+    .mobile-book-btn {
+        display: block;
+        text-align: center;
+    }
+
+    /* Hide desktop book button on mobile */
+    .desktop-book-btn {
+        display: none;
+    }
+}
+
+/* Ensure desktop styles */
+@media (min-width: 993px) {
+    .nav-list {
+        display: flex !important; /* Override any mobile styles */
+        position: static;
+        flex-direction: row;
+        background: none;
+        box-shadow: none;
+    }
+
+    .mobile-book-btn {
+        display: none;
+    }
+
+    .desktop-book-btn {
+        display: block;
+    }
+}
+
+/* Hamburger menu icon animation */
+.nav-toggle .bar {
     display: block;
-    padding: 10px 20px;
-    font-size: 1.1rem;
-  }
+    width: 25px;
+    height: 3px;
+    background: #333; /* Adjust to match your design */
+    margin: 5px 0;
+    transition: all 0.3s ease;
+}
+
+.nav-toggle.active .bar:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.nav-toggle.active .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-toggle.active .bar:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
   
   .mobile-book-btn {
     margin-top: 20px;

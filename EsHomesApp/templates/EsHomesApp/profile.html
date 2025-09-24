@@ -1,0 +1,492 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | ES Homes & Apartments</title>
+    <meta name="description" content="View and manage your ES Homes & Apartments profile and booking history.">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animations.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .profile-section {
+            padding: var(--section-padding);
+            background-color: var(--light-color);
+            min-height: calc(100vh - 300px);
+        }
+        
+        .profile-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .profile-header {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid var(--primary-color);
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+        
+        .profile-email {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+        
+        .profile-stats {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .profile-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+        
+        .profile-sidebar {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--text-color);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            text-decoration: none;
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: rgba(59, 89, 152, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .sidebar-menu i {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .profile-main {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+        
+        .personal-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .info-item {
+            margin-bottom: 1rem;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+        
+        .info-value {
+            color: var(--text-color);
+        }
+        
+        .booking-history {
+            margin-top: 2rem;
+        }
+        
+        .booking-card {
+            border: 1px solid #eee;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+        
+        .booking-card:hover {
+            box-shadow: var(--shadow);
+            transform: translateY(-3px);
+        }
+        
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .booking-id {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .booking-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .status-confirmed {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
+        }
+        
+        .status-pending {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+        }
+        
+        .status-completed {
+            background-color: rgba(59, 89, 152, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .status-cancelled {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--error-color);
+        }
+        
+        .booking-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .booking-property {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .property-image {
+            width: 80px;
+            height: 60px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        .property-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .property-info h4 {
+            margin: 0 0 0.25rem;
+            font-size: 1rem;
+        }
+        
+        .property-info p {
+            margin: 0;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .booking-dates {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .date-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .date-item i {
+            margin-right: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .booking-actions {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.875rem;
+        }
+        
+        @media (max-width: 768px) {
+            .profile-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-avatar {
+                margin: 0 auto;
+            }
+            
+            .profile-stats {
+                justify-content: center;
+            }
+            
+            .personal-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .booking-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'media/logo.jpg' %}" alt="ES Homes &amp; Apartments Logo">
+                    </a>
+                </div>
+                <nav class="nav">
+                    <ul class="nav-list" id="nav-list">
+                        <li class="nav-item"><a href="{% url 'home' %}" class="nav-link active">Home</a></li>
+                        <li class="nav-item"><a href="{% url 'apartments' %}" class="nav-link">Apartments</a></li>
+                        <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About Us</a></li>
+                        <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
+                        <li class="nav-item mobile-only"><a href="{% url 'profile' %}" class="nav-link"><i class="fas fa-user-circle fa-lg"></i> </a></li>
+                        <li class="nav-item mobile-only"><a href="{% url 'user_login' %}" class="btn btn-secondary mobile-btn">Login</a></li>
+                        <li class="nav-item mobile-only"><a href="{% url 'booking' %}" class="btn btn-primary mobile-btn">Book Now</a></li>
+                    </ul>
+                </nav>
+                <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-list">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+
+            </div>
+        </div>
+    </header>
+    <!-- Profile Section -->
+    <section class="profile-section">
+        <div class="container">
+            <div class="profile-container">
+                <!-- Profile Header -->
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        {% if user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" alt="{{ user.get_full_name }} Profile Picture">
+                        {% else %}
+                            <img src="{% static 'media/default-avatar.jpg' %}" alt="Default Profile Picture">
+                        {% endif %}
+                    </div>
+                    <div class="profile-info">
+                        <h1 class="profile-name">{{ user.get_full_name }}</h1>
+                        <p class="profile-email">{{ user.email }}</p>
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">{{ total_bookings }}</div>
+                                <div class="stat-label">Bookings</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Profile Content -->
+                <div class="profile-content">
+                    <!-- Sidebar -->
+                    <div class="profile-sidebar">
+                        <ul class="sidebar-menu">
+                            <li><a href="#" class="active"><i class="fas fa-user"></i> Personal Information</a></li>
+                            <li><a href="#"><i class="fas fa-history"></i> Booking History</a></li>
+                            <li><a href="{% url 'logout_user' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Main Content -->
+                    <div class="profile-main">
+                        <!-- Personal Information -->
+                        <div class="personal-information">
+                            <h2 class="section-title">Personal Information</h2>
+                            <div class="personal-info">
+                                <div class="info-item">
+                                    <div class="info-label">First Name</div>
+                                    <div class="info-value">{{ user.first_name }}</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Last Name</div>
+                                    <div class="info-value">{{ user.last_name }}</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Username</div>
+                                    <div class="info-value">{{ user.username }}</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Email Address</div>
+                                    <div class="info-value">{{ user.email }}</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Phone Number</div>
+                                    <div class="info-value">{{ user.phone_number|default:"Not provided" }}</div>
+                                </div>
+                                {% if user.bio %}
+                                <div class="info-item">
+                                    <div class="info-label">Bio</div>
+                                    <div class="info-value">{{ user.bio }}</div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Booking History -->
+                        <div class="booking-history">
+                            <h2 class="section-title">Booking History</h2>
+                            {% if total_bookings > 0 %}
+                                <!-- Booking cards will be added here when we implement bookings -->
+                            {% else %}
+                                <p>You haven't made any bookings yet.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="{% static 'media/logo.jpg' %}" alt="ES Homes &amp; Apartments Logo">
+                    <p>Your life, your space, your home.</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'apartments' %}">Apartments</a></li>
+                        <li><a href="{% url 'about' %}">About Us</a></li>
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                        <li><a href="{% url 'booking' %}">Book Now</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:E.sglobal4@gmail.com">E.sglobal4@gmail.com</a></li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+2348000000000">+234 800 000 0000</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Lagos, Nigeria</li>
+                    </ul>
+                </div>
+                <div class="footer-social">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ES Homes & Apartments. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/animations.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,325 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ES Homes & Apartments | Your life, your space, your home</title>
+    <meta name="description" content="ES Homes & Apartments offers exceptional residential spaces that blend comfort, elegance, and community spirit.">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animations.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Using system fonts - no Google Fonts needed -->
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'media/logo.jpg' %}" alt="ES Homes &amp; Apartments Logo">
+                    </a>
+                </div>
+                <nav class="nav">
+                    <ul class="nav-list" id="nav-list">
+                        <li class="nav-item"><a href="{% url 'home' %}" class="nav-link active">Home</a></li>
+                        <li class="nav-item"><a href="{% url 'apartments' %}" class="nav-link">Apartments</a></li>
+                        <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About Us</a></li>
+                        <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
+                        <li class="nav-item mobile-only"><a href="{% url 'profile' %}" class="nav-link"><i class="fas fa-user-circle fa-lg"></i> </a></li>
+                        
+                        {% if not user.is_authenticated %}
+                            <li class="nav-item mobile-only"><a href="{% url 'user_login' %}" class="btn btn-secondary mobile-btn">Login</a></li>
+                        {% endif %}
+                        <li class="nav-item mobile-only"><a href="{% url 'booking' %}" class="btn btn-primary mobile-btn">Book Now</a></li>
+                    </ul>
+                </nav>
+                <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-list">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+
+            </div>
+        </div>
+    </header>
+
+
+
+<div class="section-padding bg-light">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Payment Confirmation</h2>
+            <p class="section-subtitle">Complete your booking by confirming the details and making payment</p>
+        </div>
+        
+        <div class="auth-container">
+            <div class="auth-form-wrapper">
+                <div class="booking-details">
+                    <h4>Booking Details</h4>
+                    <div class="booking-info">
+                        <div class="booking-row">
+                            <div class="booking-col">
+                                <p><i class="fas fa-building"></i> <strong>Apartment:</strong> {{ booking.apartment.name }}</p>
+                                <p><i class="fas fa-calendar-check"></i> <strong>Check-in:</strong> {{ booking.check_in_date }}</p>
+                                <p><i class="fas fa-calendar-times"></i> <strong>Check-out:</strong> {{ booking.check_out_date }}</p>
+                            </div>
+                            <div class="booking-col">
+                                <p><i class="fas fa-users"></i> <strong>Guests:</strong> {{ booking.guests }}</p>
+                                <p><i class="fas fa-money-bill-wave"></i> <strong>Total Amount:</strong> ₦{{ booking.total_amount }}</p>
+                                <p><i class="fas fa-info-circle"></i> <strong>Status:</strong> <span class="booking-status">{{ booking.status|title }}</span></p>
+                            </div>
+                        </div>
+                        
+                        {% if booking.special_requests %}
+                        <div class="special-requests">
+                            <h5><i class="fas fa-clipboard-list"></i> Special Requests:</h5>
+                            <p class="request-text">{{ booking.special_requests }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="payment-section">
+                        <h4><i class="fas fa-credit-card"></i> Payment Information</h4>
+                        <p>Please review your booking details above and click the button below to proceed with payment.</p>
+                        
+                        <div class="payment-actions">
+                            <script src="https://checkout.flutterwave.com/v3.js"></script>
+                            <button type="button" class="btn btn-primary" onClick="makePayment()">
+                                <i class="fas fa-lock"></i> Pay Now
+                            </button>
+                            <a href="{% url 'apartment_detail' booking.apartment.pk %}" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="auth-image">
+                <img src="{% static 'media/IMG-20250918-WA0002.jpg' %}" alt="Apartment Image">
+                <div class="auth-image-overlay">
+                    <div class="auth-image-content">
+                        <h3>Secure Payment</h3>
+                        <p>Your transaction is secured with industry-standard encryption.</p>
+                        <p>ES Homes & Apartments - Your life, your space, your home.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Payment Page Specific Styles */
+    .booking-info {
+        background-color: var(--white);
+        border-radius: var(--border-radius);
+        padding: 25px;
+        box-shadow: var(--shadow);
+        margin-bottom: 30px;
+    }
+    
+    .booking-row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -15px;
+    }
+    
+    .booking-col {
+        flex: 1;
+        padding: 0 15px;
+        min-width: 250px;
+    }
+    
+    .booking-col p {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .booking-col p i, .payment-section h4 i, .special-requests h5 i {
+        margin-right: 10px;
+        color: var(--primary-color);
+        width: 20px;
+        text-align: center;
+    }
+    
+    .booking-status {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        display: inline-block;
+        margin-left: 5px;
+    }
+    
+    .special-requests {
+        background-color: rgba(59, 89, 152, 0.05);
+        padding: 15px 20px;
+        border-radius: var(--border-radius);
+        border-left: 4px solid var(--primary-color);
+        margin-top: 20px;
+    }
+    
+    .special-requests h5 {
+        color: var(--primary-color);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .request-text {
+        margin-bottom: 0;
+        padding-left: 30px;
+    }
+    
+    .payment-section {
+        margin-top: 30px;
+    }
+    
+    .payment-section h4 {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .payment-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 25px;
+    }
+    
+    .payment-actions .btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 12px 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .payment-actions .btn:hover {
+        transform: translateY(-3px);
+    }
+    
+    .payment-actions .btn-primary {
+        background-color: var(--primary-color);
+    }
+    
+    .payment-actions .btn-secondary {
+        background-color: transparent;
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+    }
+    
+    .payment-actions .btn-secondary:hover {
+        background-color: var(--primary-color);
+        color: var(--white);
+    }
+    
+    @media (max-width: 768px) {
+        .booking-row {
+            flex-direction: column;
+        }
+        
+        .booking-col {
+            margin-bottom: 20px;
+        }
+        
+        .auth-image {
+            display: none;
+        }
+        
+        .payment-actions {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<script>
+    function makePayment() {
+        FlutterwaveCheckout({
+            public_key: "{{ public_key }}",
+            tx_ref: "{{ transaction.tx_ref }}",
+            amount: {{ transaction.amount }},
+            currency: "{{ transaction.currency }}",
+            payment_options: "card,banktransfer,ussd",
+            redirect_url: "{{ redirect_url }}",
+            meta: {
+                booking_id: "{{ booking.id }}",
+            },
+            customer: {
+                email: "{{ customer.email }}",
+                name: "{{ customer.name }}",
+            },
+            customizations: {
+                title: "ES Homes Apartment Booking",
+                description: "Payment for {{ booking.apartment.name }}",
+                logo: "{% static 'images/logo.png' %}",
+            },
+        });
+    }
+</script>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="{% static 'media/logo.jpg' %}" alt="ES Homes &amp; Apartments Logo">
+                    <p>Your life, your space, your home.</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'apartments' %}">Apartments</a></li>
+                        <li><a href="{% url 'about' %}">About Us</a></li>
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                        <li><a href="{% url 'booking' %}">Book Now</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:E.sglobal4@gmail.com">E.sglobal4@gmail.com</a></li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+2348000000000">+234 800 000 0000</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Lagos, Nigeria</li>
+                    </ul>
+                </div>
+                <div class="footer-social">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ES Homes & Apartments. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/animations.js' %}"></script>
+</body>
+</html>

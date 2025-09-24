@@ -1,0 +1,199 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | ES Homes & Apartments</title>
+    <meta name="description" content="Create an account with ES Homes & Apartments to access exclusive offers and manage your bookings.">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animations.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'media/logo.jpg' %}" alt="ES Homes &amp; Apartments Logo">
+                    </a>
+                </div>
+                <nav class="nav">
+                    <ul class="nav-list" id="nav-list">
+                        <li class="nav-item"><a href="{% url 'home' %}" class="nav-link active">Home</a></li>
+                        <li class="nav-item"><a href="{% url 'apartments' %}" class="nav-link">Apartments</a></li>
+                        <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About Us</a></li>
+                        <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
+                        {% if not user.is_authenticated %}
+                            <li class="nav-item mobile-only"><a href="{% url 'user_login' %}" class="btn btn-secondary mobile-btn">Login</a></li>
+                        {% endif %}
+                        <li class="nav-item mobile-only"><a href="{% url 'booking' %}" class="btn btn-primary mobile-btn">Book Now</a></li>
+                    </ul>
+                </nav>
+                <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-list">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- Register Section -->
+    <section class="auth-section">
+        <div class="container">
+            <div class="auth-container">
+                <div class="auth-form-wrapper">
+                    <h2 class="auth-title">Create an Account</h2>
+                    <p class="auth-subtitle">Join ES Homes & Apartments to access exclusive offers and manage your bookings.</p>
+                    
+                    <form id="registerForm" class="auth-form" method="POST" action="{% url 'register' %}">
+                        {% csrf_token %}
+                        {% if messages %}
+                        <div class="messages">
+                            {% for message in messages %}
+                            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first_name">First Name</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" id="first_name" name="first_name" placeholder="Enter your first name" required>
+                                    <div class="error-message" id="firstName-error"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="last_name">Last Name</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" id="last_name" name="last_name" placeholder="Enter your last name" required>
+                                    <div class="error-message" id="lastName-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                                <div class="error-message" id="email-error"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="username" name="username" placeholder="Choose a username" required>
+                                <div class="error-message" id="username-error"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone_number">Phone Number</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-phone"></i>
+                                <input type="tel" id="phone_number" name="phone_number" placeholder="Enter your phone number" required>
+                                <div class="error-message" id="phone-error"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password1">Password</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="password1" name="password1" placeholder="Create a password" required>
+                                <div class="error-message" id="password-error"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password2">Confirm Password</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="password2" name="password2" placeholder="Confirm your password" required>
+                                <div class="error-message" id="confirmPassword-error"></div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+                        
+                        <div class="auth-footer">
+                            <p>Already have an account? <a href="{% url 'user_login' %}">Login</a></p>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="auth-image">
+                    <img src="{% static 'media/IMG-20250918-WA0015.jpg' %}" alt="ES Homes & Apartments">
+                    <div class="auth-image-overlay">
+                        <div class="auth-image-content">
+                            <h3>Join Our Community</h3>
+                            <p>Create an account to access exclusive offers and manage your bookings with ES Homes & Apartments.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="{% static 'media/logo.jpg' %}" alt="ES Homes &amp; Apartments Logo">
+                    <p>Your life, your space, your home.</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'apartments' %}">Apartments</a></li>
+                        <li><a href="{% url 'about' %}">About Us</a></li>
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                        <li><a href="{% url 'booking' %}">Book Now</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:E.sglobal4@gmail.com">E.sglobal4@gmail.com</a></li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+2348000000000">+234 800 000 0000</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Lagos, Nigeria</li>
+                    </ul>
+                </div>
+                <div class="footer-social">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ES Homes & Apartments. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/animations.js' %}"></script>
+</body>
+</html>

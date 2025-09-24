@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ES Homes & Apartments | Your life, your space, your home</title>
     <meta name="description" content="ES Homes & Apartments offers exceptional residential spaces that blend comfort, elegance, and community spirit.">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/animations.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animations.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Using system fonts - no Google Fonts needed -->
 </head>
@@ -21,17 +22,22 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <a href="index.html">
-                        <img src="media/logo.jpg" alt="ES Homes & Apartments Logo">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'media/logo.jpg' %}" alt="ES Homes &amp; Apartments Logo">
                     </a>
                 </div>
                 <nav class="nav">
                     <ul class="nav-list" id="nav-list">
-                        <li class="nav-item"><a href="index.html" class="nav-link active">Home</a></li>
-                        <li class="nav-item"><a href="apartments.html" class="nav-link">Apartments</a></li>
-                        <li class="nav-item"><a href="about.html" class="nav-link">About Us</a></li>
-                        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-                        <li class="nav-item mobile-book-btn"><a href="booking.html" class="btn btn-primary mobile-btn">Book Now</a></li>
+                        <li class="nav-item"><a href="{% url 'home' %}" class="nav-link active">Home</a></li>
+                        <li class="nav-item"><a href="{% url 'apartments' %}" class="nav-link">Apartments</a></li>
+                        <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About Us</a></li>
+                        <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
+                        <li class="nav-item mobile-only"><a href="{% url 'profile' %}" class="nav-link"><i class="fas fa-user-circle fa-lg"></i> </a></li>
+                        
+                        {% if not user.is_authenticated %}
+                            <li class="nav-item mobile-only"><a href="{% url 'user_login' %}" class="btn btn-secondary mobile-btn">Login</a></li>
+                        {% endif %}
+                        <li class="nav-item mobile-only"><a href="{% url 'booking' %}" class="btn btn-primary mobile-btn">Book Now</a></li>
                     </ul>
                 </nav>
                 <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-list">
@@ -39,9 +45,7 @@
                     <span class="bar"></span>
                     <span class="bar"></span>
                 </button>
-                <div class="book-btn desktop-book-btn">
-                    <a href="booking.html" class="btn btn-primary">Book Now</a>
-                </div>
+
             </div>
         </div>
     </header>
@@ -50,40 +54,40 @@
     <section class="hero">
         <div class="hero-slider">
             <div class="hero-slide active">
-                <div class="hero-image" style="background-image: url('media/IMG-20250918-WA0001.jpg');"></div>
+                <div class="hero-image" style="background-image: url({% static 'media/IMG-20250918-WA0001.jpg' %});"></div>
                 <div class="container">
                     <div class="hero-content">
                         <h1 class="animate fadeInDown">Your life, your space, your home</h1>
                         <p class="animate fadeInUp animate--delay-1">Experience exceptional living spaces that blend comfort, elegance, and community spirit.</p>
                         <div class="hero-btns animate fadeInUp animate--delay-2">
-                            <a href="apartments.html" class="btn btn-primary">Explore Apartments</a>
-                            <a href="booking.html" class="btn btn-secondary">Book Now</a>
+                            <a href="{% url 'apartments' %}" class="btn btn-primary">Explore Apartments</a>
+                            <a href="{% url 'booking' %}" class="btn btn-secondary">Book Now</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="hero-slide">
-                <div class="hero-image" style="background-image: url('media/IMG-20250918-WA0002.jpg');"></div>
+                <div class="hero-image" style="background-image: url({% static 'media/IMG-20250918-WA0002.jpg' %});"></div>
                 <div class="container">
                     <div class="hero-content">
                         <h1 class="animate fadeInDown">Luxury Living Redefined</h1>
                         <p class="animate fadeInUp animate--delay-1">Discover our premium apartments designed for comfort and elegance.</p>
                         <div class="hero-btns animate fadeInUp animate--delay-2">
-                            <a href="apartments.html" class="btn btn-primary">Explore Apartments</a>
-                            <a href="booking.html" class="btn btn-secondary">Book Now</a>
+                            <a href="{% url 'apartments' %}" class="btn btn-primary">Explore Apartments</a>
+                            <a href="{% url 'booking' %}" class="btn btn-secondary">Book Now</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="hero-slide">
-                <div class="hero-image" style="background-image: url('media/IMG-20250918-WA0003.jpg');"></div>
+                <div class="hero-image" style="background-image: url({% static 'media/IMG-20250918-WA0003.jpg' %});"></div>
                 <div class="container">
                     <div class="hero-content">
                         <h1 class="animate fadeInDown">Where Memories Are Made</h1>
                         <p class="animate fadeInUp animate--delay-1">Create lasting memories in our thoughtfully designed living spaces.</p>
                         <div class="hero-btns animate fadeInUp animate--delay-2">
-                            <a href="apartments.html" class="btn btn-primary">Explore Apartments</a>
-                            <a href="booking.html" class="btn btn-secondary">Book Now</a>
+                            <a href="{% url 'apartments' %}" class="btn btn-primary">Explore Apartments</a>
+                            <a href="{% url 'booking' %}" class="btn btn-secondary">Book Now</a>
                         </div>
                     </div>
                 </div>
@@ -109,7 +113,7 @@
             </div>
             <div class="about-content">
                 <div class="about-image scroll-animate fade-in-left">
-                    <img src="media/IMG-20250918-WA0004.jpg" alt="ES Homes & Apartments Interior">
+                    <img src="{% static 'media/IMG-20250918-WA0004.jpg' %}" alt="ES Homes & Apartments Interior">
                 </div>
                 <div class="about-text scroll-animate fade-in-right">
                     <h3>Your Sanctuary in the City</h3>
@@ -137,7 +141,7 @@
                             <p>Committed to providing well-maintained and comfortable living spaces.</p>
                         </div>
                     </div>
-                    <a href="about.html" class="btn btn-secondary scroll-animate fade-in-up delay-500">Learn More About Us</a>
+                    <a href="{% url 'about' %}" class="btn btn-secondary scroll-animate fade-in-up delay-500">Learn More About Us</a>
                 </div>
             </div>
         </div>
@@ -151,77 +155,44 @@
                 <p class="section-subtitle">Discover our premium living spaces</p>
             </div>
             <div class="apartments-grid">
-                <div class="apartment-card scroll-animate fade-in-up" data-bedrooms="2" data-price="150000">
+                {% for apartment in featured_apartments %}
+                <div class="apartment-card scroll-animate fade-in-up {% if not forloop.first %}delay-{{ forloop.counter }}00{% endif %}" data-bedrooms="{{ apartment.bedrooms }}" data-price="{{ apartment.price_per_night }}">
                     <div class="apartment-image">
-                        <img src="media/IMG-20250918-WA0005.jpg" alt="2 Bedroom Apartment">
-                        <div class="apartment-tag">Popular</div>
+                        {% if apartment.images.all %}
+                            <img src="{{ apartment.images.first.image.url }}" alt="{{ apartment.name }}">
+                        {% else %}
+                            <img src="{% static 'media/IMG-20250918-WA0004.jpg' %}" alt="{{ apartment.name }}">
+                        {% endif %}
+                        {% if apartment.featured %}
+                            <div class="apartment-tag">Featured</div>
+                        {% endif %}
                     </div>
                     <div class="apartment-content">
-                        <h3 class="apartment-title">2 Bedroom Luxury Apartment</h3>
+                        <h3 class="apartment-title">{{ apartment.name }}</h3>
                         <div class="apartment-meta">
-                            <span><i class="fas fa-bed"></i> 2 Bedrooms</span>
-                            <span><i class="fas fa-bath"></i> 2 Bathrooms</span>
-                            <span><i class="fas fa-vector-square"></i> 1200 sq ft</span>
+                            <span><i class="fas fa-bed"></i> {{ apartment.bedrooms }} Bedroom{% if apartment.bedrooms != 1 %}s{% endif %}</span>
+                            <span><i class="fas fa-bath"></i> {{ apartment.bathrooms }} Bathroom{% if apartment.bathrooms != 1 %}s{% endif %}</span>
+                            <span><i class="fas fa-vector-square"></i> {{ apartment.size_sqft }} sq ft</span>
                         </div>
-                        <p class="apartment-description">Elegant and spacious 2-bedroom apartment with modern amenities and stunning views.</p>
+                        <p class="apartment-description">{{ apartment.description|truncatechars:100 }}</p>
                         <div class="apartment-price">
-                            <span class="price">₦150,000</span>
+                            <span class="price">₦{{ apartment.price_per_night|floatformat:2 }}</span>
                             <span class="period">per day</span>
                         </div>
                         <div class="apartment-actions">
-                            <a href="apartment-detail.html?id=1" class="btn btn-secondary">View Details</a>
-                            <a href="booking.html?id=1" class="btn btn-primary">Book Now</a>
+                            <a href="{% url 'apartment_detail' pk=apartment.pk %}" class="btn btn-secondary">View Details</a>
+                            <a href="{% url 'booking' %}?apartment={{ apartment.pk }}" class="btn btn-primary">Book Now</a>
                         </div>
                     </div>
                 </div>
-                <div class="apartment-card scroll-animate fade-in-up delay-200" data-bedrooms="3" data-price="250000">
-                    <div class="apartment-image">
-                        <img src="media/IMG-20250918-WA0006.jpg" alt="3 Bedroom Apartment">
-                        <div class="apartment-tag">Premium</div>
-                    </div>
-                    <div class="apartment-content">
-                        <h3 class="apartment-title">3 Bedroom Premium Apartment</h3>
-                        <div class="apartment-meta">
-                            <span><i class="fas fa-bed"></i> 3 Bedrooms</span>
-                            <span><i class="fas fa-bath"></i> 3 Bathrooms</span>
-                            <span><i class="fas fa-vector-square"></i> 1800 sq ft</span>
-                        </div>
-                        <p class="apartment-description">Spacious 3-bedroom apartment with premium finishes and exclusive amenities.</p>
-                        <div class="apartment-price">
-                            <span class="price">₦250,000</span>
-                            <span class="period">per day</span>
-                        </div>
-                        <div class="apartment-actions">
-                            <a href="apartment-detail.html?id=2" class="btn btn-secondary">View Details</a>
-                            <a href="booking.html?id=2" class="btn btn-primary">Book Now</a>
-                        </div>
-                    </div>
+                {% empty %}
+                <div class="no-apartments-message">
+                    <p>No featured apartments available at the moment.</p>
                 </div>
-                <div class="apartment-card scroll-animate fade-in-up delay-400" data-bedrooms="1" data-price="100000">
-                    <div class="apartment-image">
-                        <img src="media/IMG-20250918-WA0007.jpg" alt="Studio Apartment">
-                    </div>
-                    <div class="apartment-content">
-                        <h3 class="apartment-title">Deluxe Studio Apartment</h3>
-                        <div class="apartment-meta">
-                            <span><i class="fas fa-bed"></i> 1 Bedroom</span>
-                            <span><i class="fas fa-bath"></i> 1 Bathroom</span>
-                            <span><i class="fas fa-vector-square"></i> 800 sq ft</span>
-                        </div>
-                        <p class="apartment-description">Cozy and stylish studio apartment perfect for individuals or couples.</p>
-                        <div class="apartment-price">
-                            <span class="price">₦100,000</span>
-                            <span class="period">per day</span>
-                        </div>
-                        <div class="apartment-actions">
-                            <a href="apartment-detail.html?id=3" class="btn btn-secondary">View Details</a>
-                            <a href="booking.html?id=3" class="btn btn-primary">Book Now</a>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
             <div class="text-center mt-5 scroll-animate fade-in-up delay-600">
-                <a href="apartments.html" class="btn btn-primary">View All Apartments</a>
+                <a href="{% url 'apartments' %}" class="btn btn-primary">View All Apartments</a>
             </div>
         </div>
     </section>
@@ -234,8 +205,8 @@
                 <p class="section-subtitle">Take a virtual tour of our premium living spaces</p>
             </div>
             <div class="video-wrapper reveal reveal--up">
-                <video controls poster="media/IMG-20250918-WA0010.jpg">
-                    <source src="media/intro vid.mp4" type="video/mp4">
+                <video controls poster="{% static 'media/IMG-20250918-WA0010.jpg' %}">
+                    <source src="{% static 'media/intro vid.mp4' %}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
@@ -324,8 +295,8 @@
                 <h2 class="cta-title">Ready to Experience Luxury Living?</h2>
                 <p class="cta-text">Book your stay at ES Homes & Apartments today and discover the perfect blend of comfort, elegance, and community.</p>
                 <div class="cta-buttons">
-                    <a href="apartments.html" class="btn btn-light scroll-animate fade-in-up delay-200">Explore Apartments</a>
-                    <a href="booking.html" class="btn btn-secondary scroll-animate fade-in-up delay-400">Book Now</a>
+                    <a href="{% url 'apartments' %}" class="btn btn-light scroll-animate fade-in-up delay-200">Explore Apartments</a>
+                    <a href="{% url 'booking' %}" class="btn btn-secondary scroll-animate fade-in-up delay-400">Book Now</a>
                 </div>
             </div>
         </div>
@@ -336,17 +307,17 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <img src="media/logo.jpg" alt="ES Homes & Apartments Logo">
+                    <img src="{% static 'media/logo.jpg' %}" alt="ES Homes &amp; Apartments Logo">
                     <p>Your life, your space, your home.</p>
                 </div>
                 <div class="footer-links">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="apartments.html">Apartments</a></li>
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                        <li><a href="booking.html">Book Now</a></li>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'apartments' %}">Apartments</a></li>
+                        <li><a href="{% url 'about' %}">About Us</a></li>
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                        <li><a href="{% url 'booking' %}">Book Now</a></li>
                     </ul>
                 </div>
                 <div class="footer-contact">
@@ -379,7 +350,7 @@
     </button>
 
     <!-- Scripts -->
-    <script src="js/main.js"></script>
-    <script src="js/animations.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/animations.js' %}"></script>
 </body>
 </html>

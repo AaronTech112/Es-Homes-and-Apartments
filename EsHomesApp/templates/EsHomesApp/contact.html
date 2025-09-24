@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us | ES Homes & Apartments</title>
     <meta name="description" content="Get in touch with ES Homes & Apartments. We're here to answer your questions and help you find your perfect apartment.">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animations.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Using system fonts - no Google Fonts needed -->
     <style>
         /* Additional styles for contact page */
         .page-banner {
             height: 300px;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('media/IMG-20250918-WA0017.jpg');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{% static "media/IMG-20250918-WA0017.jpg" %}');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -258,26 +259,29 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <a href="index.html">
-                        <img src="media/logo.jpg" alt="ES Homes & Apartments Logo">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'media/logo.jpg' %}" alt="ES Homes & Apartments Logo">
                     </a>
                 </div>
                 <nav class="nav">
-                    <ul class="nav-list">
-                        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-                        <li class="nav-item"><a href="apartments.html" class="nav-link">Apartments</a></li>
-                        <li class="nav-item"><a href="about.html" class="nav-link">About Us</a></li>
-                        <li class="nav-item"><a href="contact.html" class="nav-link active">Contact</a></li>
+                    <ul class="nav-list" id="nav-list">
+                        <li class="nav-item"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
+                        <li class="nav-item"><a href="{% url 'apartments' %}" class="nav-link">Apartments</a></li>
+                        <li class="nav-item"><a href="{% url 'about' %}" class="nav-link">About Us</a></li>
+                        <li class="nav-item"><a href="{% url 'contact' %}" class="nav-link active">Contact</a></li>
+                        <li class="nav-item mobile-only"><a href="{% url 'profile' %}" class="nav-link"><i class="fas fa-user-circle fa-lg"></i> </a></li>
+                        {% if not user.is_authenticated %}
+                            <li class="nav-item mobile-only"><a href="{% url 'user_login' %}" class="btn btn-secondary mobile-btn">Login</a></li>
+                        {% endif %}
+                        <li class="nav-item mobile-only"><a href="{% url 'booking' %}" class="btn btn-primary mobile-btn">Book Now</a></li>
                     </ul>
                 </nav>
-                <div class="nav-toggle">
+                <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-list">
                     <span class="bar"></span>
                     <span class="bar"></span>
                     <span class="bar"></span>
-                </div>
-                <div class="book-btn">
-                    <a href="booking.html" class="btn btn-primary">Book Now</a>
-                </div>
+                </button>
+
             </div>
         </div>
     </header>
@@ -470,8 +474,8 @@
                 <h2 class="cta-title">Ready to Experience Luxury Living?</h2>
                 <p class="cta-text">Book your stay at ES Homes & Apartments today and discover the perfect blend of comfort, elegance, and community.</p>
                 <div class="cta-buttons">
-                    <a href="apartments.html" class="btn btn-light">Explore Apartments</a>
-                    <a href="booking.html" class="btn btn-secondary">Book Now</a>
+                    <a href="{% url 'apartments' %}" class="btn btn-light">Explore Apartments</a>
+                    <a href="{% url 'booking' %}" class="btn btn-secondary">Book Now</a>
                 </div>
             </div>
         </div>
@@ -482,17 +486,17 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <img src="media/logo.jpg" alt="ES Homes & Apartments Logo">
+                    <img src="{% static 'media/logo.jpg' %}" alt="ES Homes & Apartments Logo">
                     <p>Your life, your space, your home.</p>
                 </div>
                 <div class="footer-links">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="apartments.html">Apartments</a></li>
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                        <li><a href="booking.html">Book Now</a></li>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'apartments' %}">Apartments</a></li>
+                        <li><a href="{% url 'about' %}">About Us</a></li>
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                        <li><a href="{% url 'booking' %}">Book Now</a></li>
                     </ul>
                 </div>
                 <div class="footer-contact">
@@ -525,8 +529,8 @@
     </button>
 
     <!-- Scripts -->
-    <script src="js/main.js"></script>
-    <script src="js/animations.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/animations.js' %}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Contact Form Submission
