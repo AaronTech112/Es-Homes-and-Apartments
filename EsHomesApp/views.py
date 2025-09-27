@@ -107,7 +107,7 @@ def apartment_detail(request, pk):
     
     return render(request, 'EsHomesApp/apartment-detail.html', context)
 
-@login_required(login_url='/login_user')
+
 def booking(request):
     apartment_id = request.GET.get('apartment')
     initial_data = {}
