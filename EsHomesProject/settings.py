@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-w^=zmiwmos7qzg*f0ouzw(@am@tq37i6hots61-huie#bcm69y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -130,9 +130,9 @@ AUTH_USER_MODEL = 'EsHomesApp.CustomUser'
 
 
 # Flutterwave settings
-FLUTTERWAVE_PUBLIC_KEY = 'FLWPUBK_TEST-5d19f5091bfb069566be7aee06028b99-X'
-FLUTTERWAVE_SECRET_KEY = 'FLWSECK_TEST-859e278cae6e19a049215799aeec9dc4-X'
-FLUTTERWAVE_API_URL = 'https://api.flutterwave.com/v3/payments'
+FLUTTERWAVE_PUBLIC_KEY = 'FLWPUBK_TEST-0c263aa893f1806f8cd034e48b84cac7-X'
+FLUTTERWAVE_SECRET_KEY = 'FLWSECK_TEST-1dd9790e78eaa3e82b79d85de0dd351e-X'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

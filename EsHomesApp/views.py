@@ -2,9 +2,9 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import RegisterForm 
+from .forms import RegisterForm, BookingForm
 from django.contrib import messages
-from .models import Apartment,Transaction, Booking
+from .models import Apartment, Transaction, Booking
 from datetime import date
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -12,6 +12,7 @@ from django.views.decorators.http import require_http_methods
 import json
 import requests
 import uuid
+import decimal
 from django.conf import settings
 from django.urls import reverse
 
@@ -75,15 +76,108 @@ def apartment_detail(request, pk):
         status='available'
     ).exclude(pk=pk)[:2]
     
+    # Initialize booking form with the current apartment
+    form = BookingForm(initial={'apartment': apartment})
+    
+    # Add apartment data for JavaScript
+    apartments_data = {}
+    image_url = apartment.images.first().image.url if apartment.images.exists() else None
+    apartments_data[str(apartment.id)] = {
+        'price': float(apartment.price_per_night),
+        'name': apartment.name,
+        'bedrooms': apartment.bedrooms,
+        'bathrooms': apartment.bathrooms,
+        'image_url': image_url
+    }
+    
+    # Create a custom JSON encoder to handle Decimal objects
+    class DecimalEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, decimal.Decimal):
+                return float(obj)
+            return super(DecimalEncoder, self).default(obj)
+    
+    form.fields['apartment'].widget.attrs['data-apartments'] = json.dumps(apartments_data, cls=DecimalEncoder)
+    
     context = {
         'apartment': apartment,
         'similar_apartments': similar_apartments,
+        'form': form,
     }
     
     return render(request, 'EsHomesApp/apartment-detail.html', context)
 
+@login_required(login_url='/login_user')
 def booking(request):
-    return render(request, 'EsHomesApp/booking.html')
+    apartment_id = request.GET.get('apartment')
+    initial_data = {}
+    
+    if apartment_id:
+        try:
+            apartment = get_object_or_404(Apartment, pk=apartment_id)
+            initial_data['apartment'] = apartment
+        except:
+            pass
+
+    if request.method == 'POST':
+        form = BookingForm(request.POST)
+        print(request.POST)
+        if form.is_valid():
+            booking = form.save(commit=False)
+            booking.user = request.user
+            booking.status = 'pending'
+            
+            # Calculate total price
+            nights = (booking.check_out_date - booking.check_in_date).days
+            booking.total_price = nights * booking.apartment.price_per_night
+            booking.save()
+
+            # Create transaction
+            tx_ref = f"ESHOMES-BKG-{booking.id}-{uuid.uuid4().hex[:10].upper()}"
+            transaction = Transaction.objects.create(
+                user=request.user,
+                booking=booking,
+                amount=booking.total_price,
+                tx_ref=tx_ref,
+                transaction_status='pending'
+            )
+            print(request.POST)
+
+            messages.success(request, "Booking created. Proceeding to payment.")
+            return redirect('initiate_payment', transaction_id=transaction.id)
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field.title()}: {error}")
+    else:
+        form = BookingForm(initial=initial_data)
+        
+        # Add apartment data for JavaScript
+        apartments_data = {}
+        for apartment in Apartment.objects.all():
+            image_url = apartment.images.first().image.url if apartment.images.exists() else None
+            apartments_data[str(apartment.id)] = {
+                'price': float(apartment.price_per_night),
+                'name': apartment.name,
+                'bedrooms': apartment.bedrooms,
+                'bathrooms': apartment.bathrooms,
+                'image_url': image_url
+            }
+            
+        # Create a custom JSON encoder to handle Decimal objects
+        class DecimalEncoder(json.JSONEncoder):
+            def default(self, obj):
+                if isinstance(obj, decimal.Decimal):
+                    return float(obj)
+                return super(DecimalEncoder, self).default(obj)
+        
+        form.fields['apartment'].widget.attrs['data-apartments'] = json.dumps(apartments_data, cls=DecimalEncoder)
+    
+    context = {
+        'form': form,
+        'apartments': Apartment.objects.all().order_by('name'),
+    }
+    return render(request, 'EsHomesApp/booking.html', context)
 
 def contact(request):
     return render(request, 'EsHomesApp/contact.html')

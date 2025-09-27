@@ -9,19 +9,49 @@
     <link rel="stylesheet" href="{% static 'css/animations.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        .success-message {
-            color: green;
-            background-color: #e8f5e9;
-            padding: 10px;
-            border-radius: 4px;
-            margin: 10px 0;
+        /* Django Messages */
+        .messages {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
         }
-        .error-message {
-            color: #d32f2f;
-            background-color: #ffebee;
-            padding: 10px;
-            border-radius: 4px;
-            margin: 10px 0;
+        
+        .messages li {
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .messages li::before {
+            margin-right: 10px;
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+        }
+        
+        .messages .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .messages .success::before {
+            content: "\f00c";
+            color: #28a745;
+        }
+        
+        .messages .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .messages .error::before {
+            content: "\f071";
+            color: #dc3545;
         }
         #availability-message {
             display: none;
@@ -440,18 +470,30 @@
                     
                     <form id="booking-form" method="post" action="{% url 'booking' %}">
                         {% csrf_token %}
-                        <!-- Hidden field for apartment ID -->
-                        <input type="hidden" id="apartment-id" name="apartment_id">
+                        {% if messages %}
+                            <div class="messages">
+                                {% for message in messages %}
+                                    <div class="{{ message.tags }}">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                         
-                        <!-- Step 1: Reservation Details -->
                         <div class="form-section active" id="section-1">
                             <div class="form-group">
-                                <label for="apartment">Select Apartment</label>
-                                <select id="apartment" name="apartment" class="form-control" required>
-                                    <option value="">-- Select an Apartment --</option>
-                                    <!-- This will be populated from the API -->
-                                </select>
-                                <div class="error-message">Please select an apartment</div>
+                                <label for="{{ form.apartment.id_for_label }}">Select Apartment</label>
+                                {{ form.apartment }}
+                                {% if form.apartment.errors %}
+                            <div class="messages">
+                                <div class="error">
+                                    {{ form.apartment.errors }}
+                                </div>
+                            </div>
+                            <script>
+                                document.getElementById('{{ form.apartment.id_for_label }}').classList.add('field-error');
+                            </script>
+                        {% endif %}
                             </div>
                             
                             <div class="form-row">
@@ -499,7 +541,7 @@
                             
                             <div class="form-navigation">
                                 <div></div> <!-- Empty div for flex spacing -->
-                                <button type="bsubmit" class="btn btn-primary next-step" data-step="1">Continue to Guest Information</button>
+                                <button type="submit" class="btn btn-primary next-step" >Proceed to pay</button>
                             </div>
                         </div>
                         
@@ -511,15 +553,42 @@
                     <h3 class="summary-title">Booking Summary</h3>
                     
                     <div class="summary-apartment">
-                        <div class="summary-image">
-                            <img src="{% static 'media/IMG-20250918-WA0006.jpg' %}" alt="3 Bedroom Premium Apartment" id="summary-image">
+                    <div class="summary-image">
+                        {% if selected_apartment and selected_apartment.images.all %}
+                            <img src="{{ selected_apartment.images.first.image.url }}" alt="{{ selected_apartment.name }}" id="summary-image">
+                        {% elif selected_apartment %}
+                            <img src="{% static 'media/default-apartment.jpg' %}" alt="{{ selected_apartment.name }}" id="summary-image">
+                        {% else %}
+                            <img src="{% static 'media/IMG-20250918-WA0006.jpg' %}" alt="Apartment" id="summary-image">
+                        {% endif %}
+                    </div>
+                    <div class="summary-details">
+                        <h4 id="summary-apartment-name">
+                            {% if selected_apartment %}
+                                {{ selected_apartment.name }}
+                            {% else %}
+                                Select an Apartment
+                            {% endif %}
+                        </h4>
+                        <div class="summary-meta" id="summary-meta">
+                            {% if selected_apartment %}
+                                {{ selected_apartment.bedrooms }} Bedroom{% if selected_apartment.bedrooms != 1 %}s{% endif %} • 
+                                {{ selected_apartment.bathrooms }} Bathroom{% if selected_apartment.bathrooms != 1 %}s{% endif %}
+                            {% else %}
+                                -- Bedrooms • -- Bathrooms
+                            {% endif %}
                         </div>
-                        <div class="summary-details">
-                            <h4 id="summary-apartment-name">3 Bedroom Premium Apartment</h4>
-                            <div class="summary-meta" id="summary-meta">3 Bedrooms • 3 Bathrooms</div>
-                            <div class="summary-price" id="summary-price">₦250,000 per day</div>
+                        <div class="summary-price" id="summary-price">
+                            {% if selected_apartment %}
+                                ₦{{ selected_apartment.price_per_night|floatformat:0 }} per day
+                            {% else %}
+                                ₦0 per day
+                            {% endif %}
                         </div>
                     </div>
+                </div>
+                    <!-- Hidden field to store total price -->
+                    <input type="hidden" name="total_price" id="id_total_price" value="0">
                     
                     <div class="summary-info">
                         <div class="summary-row">
@@ -529,6 +598,18 @@
                         <div class="summary-row">
                             <span class="summary-label">Check-out</span>
                             <span class="summary-value" id="summary-check-out">--/--/----</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Nights</span>
+                            <span class="summary-value" id="summary-nights">0</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Price per night</span>
+                            <span class="summary-value" id="summary-price-per-night">₦0</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Total Price</span>
+                            <span class="summary-value" id="summary-total-price">₦0</span>
                         </div>
                         <div class="summary-row">
                             <span class="summary-label">Guests</span>
@@ -605,33 +686,209 @@
         <i class="fas fa-chevron-up"></i>
     </button>
 
-    <!-- Scripts -->
-    <script src="{% static 'js/main.js' %}"></script>
-    <script src="{% static 'js/animations.js' %}"></script>
-    <script src="{% static 'js/booking-api.js' %}"></script>
-    <script src="{% static 'js/booking-integration.js' %}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Get URL parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            const apartmentId = urlParams.get('id');
-            const checkIn = urlParams.get('check_in');
-            const checkOut = urlParams.get('check_out');
-            const guests = urlParams.get('guests');
+            // Set minimum dates for check-in and check-out
+            const today = new Date().toISOString().split('T')[0];
+            // Variables already defined elsewhere
+             // const checkInInput = document.getElementById('check-in-date');
+             // const checkOutInput = document.getElementById('check-out-date');
+            // apartmentSelect is already defined elsewhere
+// const apartmentSelect = document.getElementById('id_apartment');
+            // Using id_guests instead of guests
+// const guestsSelect = document.getElementById('guests');
             
-            // Set form values from URL parameters
-            if (apartmentId) {
-                document.getElementById('apartment').value = apartmentId;
-                updateApartmentSummary();
+            // Function to validate form field
+            function validateField(field) {
+                if (field.value.trim() === '') {
+                    field.classList.remove('field-valid');
+                    field.classList.add('field-error');
+                    return false;
+                } else {
+                    field.classList.remove('field-error');
+                    field.classList.add('field-valid');
+                    return true;
+                }
             }
             
-            if (checkIn) document.getElementById('check-in').value = checkIn;
-            if (checkOut) document.getElementById('check-out').value = checkOut;
-            if (guests) document.getElementById('guests').value = guests;
+            // Add event listeners
+            const guestsSelect = document.getElementById('id_guests');
+            if (guestsSelect) {
+                guestsSelect.addEventListener('change', updateGuestsSummary);
+            }
             
-            // Update summary if parameters are present
-            if (checkIn && checkOut) {
-                updateDateSummary();
+            const apartmentSelect = document.getElementById('id_apartment');
+            if (apartmentSelect) {
+                apartmentSelect.addEventListener('change', updateApartmentSummary);
+            }
+            
+            // Date input handling
+            const checkInInput = document.getElementById('id_check_in_date');
+            const checkOutInput = document.getElementById('id_check_out_date');
+            
+            // Function to calculate and update total price
+            function updateTotalPrice() {
+                const checkInDate = new Date(checkInInput.value);
+                const checkOutDate = new Date(checkOutInput.value);
+                const apartmentId = apartmentSelect.value;
+                
+                if (checkInDate && checkOutDate && apartmentId && checkOutDate > checkInDate) {
+                    // Calculate number of nights
+                    const nights = Math.floor((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+                    
+                    // Get price per night from the selected option
+                    const selectedOption = apartmentSelect.options[apartmentSelect.selectedIndex];
+                    // Extract price from the option text instead of summary-price
+                    const priceText = selectedOption.text;
+                    const priceMatch = priceText.match(/₦([\d,]+)/);
+                    const pricePerNight = priceMatch ? parseFloat(priceMatch[1].replace(/,/g, '')) : 0;
+                    
+                    // Calculate total price
+                    const totalPrice = nights * pricePerNight;
+                    
+                    // Update summary
+                    document.getElementById('summary-nights').textContent = nights;
+                    document.getElementById('summary-price-per-night').textContent = '₦' + pricePerNight.toLocaleString();
+                    document.getElementById('summary-total-price').textContent = '₦' + totalPrice.toLocaleString();
+                    document.getElementById('summary-duration').textContent = nights + (nights === 1 ? ' night' : ' nights');
+                    
+                    // Calculate service fee (5% of total)
+                    const serviceFee = Math.round(totalPrice * 0.05);
+                    document.getElementById('summary-fee').textContent = '₦' + serviceFee.toLocaleString();
+                    document.getElementById('summary-rate').textContent = '₦' + totalPrice.toLocaleString();
+                    
+                    // Update grand total
+                    const grandTotal = totalPrice + serviceFee;
+                    document.getElementById('summary-total').textContent = '₦' + grandTotal.toLocaleString();
+                    
+                    // Update hidden field for form submission
+                    const totalPriceInput = document.getElementById('id_total_price');
+                    if (totalPriceInput) {
+                        totalPriceInput.value = grandTotal;
+                    } else {
+                        // Create hidden field if it doesn't exist
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.id = 'id_total_price';
+                        hiddenInput.name = 'total_price';
+                        hiddenInput.value = grandTotal;
+                        document.getElementById('booking-form').appendChild(hiddenInput);
+                    }
+                }
+            }
+            
+            // Add validation to required fields
+            document.querySelectorAll('input[required], select[required], textarea[required]').forEach(field => {
+                field.addEventListener('blur', () => validateField(field));
+                field.addEventListener('change', () => validateField(field));
+            });
+            
+            // Add price calculation events
+            if (checkInInput && checkOutInput && apartmentSelect) {
+                checkInInput.addEventListener('change', updateTotalPrice);
+                checkOutInput.addEventListener('change', updateTotalPrice);
+                apartmentSelect.addEventListener('change', updateTotalPrice);
+                
+                checkInInput.min = today;
+                
+                checkInInput.addEventListener('change', function() {
+                    // Set check-out minimum date to day after check-in
+                    const checkInDate = new Date(this.value);
+                    const minCheckOutDate = new Date(checkInDate);
+                    minCheckOutDate.setDate(checkInDate.getDate() + 1);
+                    checkOutInput.min = minCheckOutDate.toISOString().split('T')[0];
+                    
+                    // If check-out date is before new minimum, clear it
+                    if (checkOutInput.value && new Date(checkOutInput.value) <= checkInDate) {
+                        checkOutInput.value = '';
+                        checkOutInput.classList.remove('field-valid');
+                        checkOutInput.classList.add('field-error');
+                    }
+                    
+                    // Update summary check-in date
+                    const formattedDate = checkInDate.toLocaleDateString('en-GB');
+                    document.getElementById('summary-check-in').textContent = formattedDate;
+                    
+                    // Update total price calculation
+                    updateTotalPrice();
+                });
+                
+                checkOutInput.addEventListener('change', function() {
+                    // Update summary check-out date
+                    const checkOutDate = new Date(this.value);
+                    const formattedDate = checkOutDate.toLocaleDateString('en-GB');
+                    document.getElementById('summary-check-out').textContent = formattedDate;
+                    
+                    // Update total price calculation
+                    updateTotalPrice();
+                });
+                
+                // Update guests in summary when changed
+                if (guestsSelect) {
+                    guestsSelect.addEventListener('change', function() {
+                        document.getElementById('summary-guests').textContent = this.value || '--';
+                    });
+                }
+                
+                // Update apartment details in summary when apartment changes
+                if (apartmentSelect) {
+                    apartmentSelect.addEventListener('change', function() {
+                        const selectedOption = this.options[this.selectedIndex];
+                        const apartmentId = this.value;
+                        
+                        if (selectedOption && apartmentId) {
+                            // Get apartment data from data attribute
+                            const apartmentsData = JSON.parse(this.getAttribute('data-apartments') || '{}');
+                            const apartmentData = apartmentsData[apartmentId];
+                            
+                            if (apartmentData) {
+                                // Update apartment name
+                                document.getElementById('summary-apartment-name').textContent = apartmentData.name;
+                                
+                                // Update price per night in summary
+                                document.getElementById('summary-price').textContent = `₦${apartmentData.price.toLocaleString()} per day`;
+                                
+                                // Update apartment metadata (bedrooms, bathrooms)
+                                document.getElementById('summary-meta').textContent = 
+                                    `${apartmentData.bedrooms} Bedroom${apartmentData.bedrooms !== 1 ? 's' : ''} • ${apartmentData.bathrooms} Bathroom${apartmentData.bathrooms !== 1 ? 's' : ''}`;
+                                
+                                // Update apartment image if available
+                                if (apartmentData.image_url) {
+                                    document.getElementById('summary-image').src = apartmentData.image_url;
+                                }
+                                
+                                // Update total price calculation
+                                updateTotalPrice();
+                            }
+                        } else {
+                            document.getElementById('summary-apartment-name').textContent = 'Select an Apartment';
+                            document.getElementById('summary-price').textContent = '₦0 per day';
+                            document.getElementById('summary-meta').textContent = '-- Bedrooms • -- Bathrooms';
+                        }
+                        
+                        // Update total price calculation
+                        updateTotalPrice();
+                    });
+                }
+            
+            if (checkInInput) {
+                checkInInput.min = today;
+                checkInInput.addEventListener('change', function() {
+                    if (checkOutInput) {
+                        const nextDay = new Date(this.value);
+                        nextDay.setDate(nextDay.getDate() + 1);
+                        checkOutInput.min = nextDay.toISOString().split('T')[0];
+                        
+                        // Calculate price when dates change
+                        updateTotalPrice();
+                        
+                        // If check-out date is before check-in date, reset it
+                        if (checkOutInput.value && new Date(checkOutInput.value) <= new Date(this.value)) {
+                            checkOutInput.value = nextDay.toISOString().split('T')[0];
+                            updateTotalPrice();
+                        }
+                    }
+                });
             }
             
             // Multi-step form navigation
@@ -640,52 +897,160 @@
             const formSections = document.querySelectorAll('.form-section');
             const steps = document.querySelectorAll('.booking-step');
             
+            let currentStep = 1;
+            
             nextButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const currentStep = parseInt(this.getAttribute('data-step'));
-                    const currentSection = document.getElementById(`section-${currentStep}`);
-                    const nextSection = document.getElementById(`section-${currentStep + 1}`);
-                    
-                    // Validate current section
-                    if (validateSection(currentStep)) {
-                        // Hide current section and show next section
-                        currentSection.classList.remove('active');
-                        nextSection.classList.add('active');
-                        
-                        // Update steps
-                        steps[currentStep - 1].classList.remove('active');
-                        steps[currentStep - 1].classList.add('completed');
-                        steps[currentStep].classList.add('active');
-                        
-                        // Scroll to top of form
-                        document.querySelector('.booking-form').scrollIntoView({
-                            behavior: 'smooth'
-                        });
+                button.addEventListener('click', () => {
+                    const step = parseInt(button.getAttribute('data-step'));
+                    if (validateStep(step)) {
+                        showStep(step + 1);
                     }
                 });
             });
             
             prevButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const currentStep = parseInt(this.getAttribute('data-step'));
-                    const currentSection = document.getElementById(`section-${currentStep}`);
-                    const prevSection = document.getElementById(`section-${currentStep - 1}`);
-                    
-                    // Hide current section and show previous section
-                    currentSection.classList.remove('active');
-                    prevSection.classList.add('active');
-                    
-                    // Update steps
-                    steps[currentStep - 1].classList.remove('active');
-                    steps[currentStep - 2].classList.remove('completed');
-                    steps[currentStep - 2].classList.add('active');
-                    
-                    // Scroll to top of form
-                    document.querySelector('.booking-form').scrollIntoView({
-                        behavior: 'smooth'
-                    });
+                button.addEventListener('click', () => {
+                    const step = parseInt(button.getAttribute('data-step'));
+                    showStep(step - 1);
                 });
             });
+            
+            function showStep(step) {
+                formSections.forEach(section => section.classList.remove('active'));
+                steps.forEach(s => s.classList.remove('active'));
+                
+                document.getElementById(`section-${step}`).classList.add('active');
+                document.getElementById(`step-${step}`).classList.add('active');
+                currentStep = step;
+            }
+            
+            // Function to update apartment details in summary
+            function updateApartmentSummary() {
+                const apartmentSelect = document.getElementById('id_apartment');
+                const apartmentId = apartmentSelect.value;
+                
+                if (apartmentId) {
+                    try {
+                        // Get apartment data from data-apartments attribute
+                        const apartmentsData = JSON.parse(apartmentSelect.getAttribute('data-apartments') || '{}');
+                        const apartmentData = apartmentsData[apartmentId];
+                        
+                        if (apartmentData) {
+                            // Update apartment name
+                            document.getElementById('summary-apartment-name').textContent = apartmentData.name;
+                            
+                            // Update apartment meta details (bedrooms, bathrooms)
+                            document.getElementById('summary-meta').textContent = 
+                                `${apartmentData.bedrooms} Bedroom${apartmentData.bedrooms !== 1 ? 's' : ''} • ${apartmentData.bathrooms} Bathroom${apartmentData.bathrooms !== 1 ? 's' : ''}`;
+                            
+                            // Update price per night
+                            document.getElementById('summary-price').textContent = `₦${apartmentData.price.toLocaleString()} per day`;
+                            
+                            // Update apartment image if image_url is available
+                            if (apartmentData.image_url) {
+                                document.getElementById('summary-image').src = apartmentData.image_url;
+                                document.getElementById('summary-image').alt = apartmentData.name;
+                            }
+                            
+                            // Update total price calculation
+                            updateTotalPrice();
+                        }
+                    } catch (error) {
+                        console.error('Error updating apartment summary:', error);
+                    }
+                }
+            }
+            
+            // Function to update dates in summary
+            function updateDateSummary() {
+                const checkInDate = document.getElementById('id_check_in_date').value;
+                const checkOutDate = document.getElementById('id_check_out_date').value;
+                
+                if (checkInDate) {
+                    document.getElementById('summary-check-in').textContent = formatDate(checkInDate);
+                }
+                
+                if (checkOutDate) {
+                    document.getElementById('summary-check-out').textContent = formatDate(checkOutDate);
+                }
+                
+                if (checkInDate && checkOutDate) {
+                    const nights = calculateNights(checkInDate, checkOutDate);
+                    document.getElementById('summary-duration').textContent = nights + (nights === 1 ? ' night' : ' nights');
+                    
+                    // Update total price calculation
+                    updateTotalPrice();
+                }
+            }
+            
+            // Function to update guests in summary
+            function updateGuestsSummary() {
+                const guests = document.getElementById('id_guests').value;
+                if (guests) {
+                    document.getElementById('summary-guests').textContent = guests + (guests === '1' ? ' guest' : ' guests');
+                    
+                    // Update total price when guests change
+                    updateTotalPrice();
+                }
+            }
+            
+            // Helper function to format date
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' });
+            }
+            
+            // Helper function to calculate nights
+            function calculateNights(checkIn, checkOut) {
+                const startDate = new Date(checkIn);
+                const endDate = new Date(checkOut);
+                const timeDiff = endDate.getTime() - startDate.getTime();
+                return Math.ceil(timeDiff / (1000 * 3600 * 24));
+            }
+            
+            // Function to update total price
+            function updateTotalPrice() {
+                const checkInDate = document.getElementById('id_check_in_date').value;
+                const checkOutDate = document.getElementById('id_check_out_date').value;
+                const apartmentSelect = document.getElementById('id_apartment');
+                
+                if (checkInDate && checkOutDate && apartmentSelect.value) {
+                    // Calculate nights
+                    const startDate = new Date(checkInDate);
+                    const endDate = new Date(checkOutDate);
+                    const timeDiff = endDate.getTime() - startDate.getTime();
+                    const nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                    
+                    // Get apartment data
+                    const apartmentsData = JSON.parse(apartmentSelect.getAttribute('data-apartments') || '{}');
+                    const apartmentData = apartmentsData[apartmentSelect.value];
+                    
+                    if (apartmentData && nights > 0) {
+                        const pricePerNight = apartmentData.price;
+                        const totalPrice = pricePerNight * nights;
+                        
+                        // Update nights in summary
+                        document.getElementById('summary-nights').textContent = nights;
+                        
+                        // Update price per night
+                        document.getElementById('summary-price-per-night').textContent = '₦' + pricePerNight.toLocaleString();
+                        
+                        // Update apartment rate (subtotal)
+                        document.getElementById('summary-rate').textContent = '₦' + totalPrice.toLocaleString();
+                        
+                        // Calculate service fee (5% of total)
+                        const serviceFee = Math.round(totalPrice * 0.05);
+                        document.getElementById('summary-fee').textContent = '₦' + serviceFee.toLocaleString();
+                        
+                        // Update grand total
+                        const grandTotal = totalPrice + serviceFee;
+                        document.getElementById('summary-total').textContent = '₦' + grandTotal.toLocaleString();
+                        
+                        // Update hidden total price field
+                        document.getElementById('id_total_price').value = grandTotal;
+                    }
+                }
+            }
             
             // Validate form section
             function validateSection(step) {
@@ -711,7 +1076,7 @@
                     }
                     
                     // Date validation
-                    if (field.type === 'date' && field.id === 'check-in') {
+                    if (field.type === 'date' && field.id === 'check-in-date') {
                         const today = new Date();
                         today.setHours(0, 0, 0, 0);
                         const checkInDate = new Date(field.value);
@@ -722,8 +1087,8 @@
                         }
                     }
                     
-                    if (field.type === 'date' && field.id === 'check-out') {
-                        const checkInDate = new Date(document.getElementById('check-in').value);
+                    if (field.type === 'date' && field.id === 'check-out-date') {
+                        const checkInDate = new Date(document.getElementById('check-in-date').value);
                         const checkOutDate = new Date(field.value);
                         
                         if (checkOutDate <= checkInDate) {
@@ -761,10 +1126,25 @@
             bookingForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                // Validate final step
-                if (validateSection(3)) {
+                // Validate all sections before submitting
+                let isValid = true;
+                
+                // Check all required fields in the form
+                const requiredFields = bookingForm.querySelectorAll('[required]');
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        field.classList.add('error');
+                        isValid = false;
+                    } else {
+                        field.classList.remove('error');
+                    }
+                });
+                
+                if (isValid) {
                     // Submit form to Django view
                     this.submit();
+                } else {
+                    alert("Please fill in all required fields");
                 }
             });
         });

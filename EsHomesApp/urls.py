@@ -15,11 +15,12 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('register/', views.register, name='register'),
     path('logout_user', views.logout_user, name='logout_user'),
+    path('login_user', views.login_user, name='login_user'),
     path('apartment/<int:pk>/book/', views.create_booking, name='create_booking'),
     path('payment/initiate/<int:transaction_id>/', views.initiate_payment, name='initiate_payment'),
     path('payment-callback/', views.payment_callback, name='payment_callback'),
     path('thank-you/<int:transaction_id>/', views.thank_you, name='thank_you'),
-   
+
 
 ]
 
