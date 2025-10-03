@@ -150,6 +150,8 @@ def booking(request):
                 for error in errors:
                     messages.error(request, f"{field.title()}: {error}")
     else:
+        if not request.user.is_authenticated:
+            return redirect('login_user')
         form = BookingForm(initial=initial_data)
         
         # Add apartment data for JavaScript
@@ -178,6 +180,7 @@ def booking(request):
         'apartments': Apartment.objects.all().order_by('name'),
     }
     return render(request, 'EsHomesApp/booking.html', context)
+  
 
 def contact(request):
     return render(request, 'EsHomesApp/contact.html')
